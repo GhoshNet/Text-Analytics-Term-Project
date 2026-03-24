@@ -1,0 +1,11 @@
+Comparison,Raw_p,Holm_p,Significant
+Scenario 1: All retained  vs  Scenario 2: Stopwords removed,0.002,0.0195,✔ Yes
+Scenario 1: All retained  vs  Scenario 3: Punctuation removed,0.002,0.0195,✔ Yes
+Scenario 1: All retained  vs  Scenario 4: Both removed,0.002,0.0195,✔ Yes
+Scenario 2: Stopwords removed  vs  Scenario 5: Frequency Discounting,0.002,0.0195,✔ Yes
+Scenario 3: Punctuation removed  vs  Scenario 5: Frequency Discounting,0.002,0.0195,✔ Yes
+Scenario 4: Both removed  vs  Scenario 5: Frequency Discounting,0.002,0.0195,✔ Yes
+Scenario 3: Punctuation removed  vs  Scenario 4: Both removed,0.0195,0.0781,✘ No
+Scenario 2: Stopwords removed  vs  Scenario 3: Punctuation removed,0.0273,0.082,✘ No
+Scenario 2: Stopwords removed  vs  Scenario 4: Both removed,0.2754,0.5508,✘ No
+Scenario 1: All retained  vs  Scenario 5: Frequency Discounting,0.7695,0.7695,✘ No

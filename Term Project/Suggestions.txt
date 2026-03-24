@@ -1,0 +1,59 @@
+So for RF or NB u can use the same method:
+Generate repeated performance measurements.
+⭐ Step 1 — Generate repeated performance values
+To run hypothesis tests, you need multiple accuracy/F1 values per scenario, not just one.
+The standard way is:
+✔ 10‑fold Stratified Cross‑Validation
+For each scenario (A–E), and for each model (RF or NB):
+Run StratifiedKFold(n_splits=10)
+Collect Accuracy/F1 for each fold → 10 values per scenario
+This gives you a matrix like:
+Scenario	Fold1	Fold2	Fold3	Fold4	Fold5
+A	0.71	0.72	0.70	0.73	0.71
+B	...	...	...	...	...
+…	…	…	…	…	…
+Once you have this, you can do proper hypothesis testing.
+⭐ Step 2 — Run the Friedman Test
+The Friedman test checks whether any scenario differs from the others.
+Null hypothesis
+All scenarios perform equally.
+Alternative
+At least one scenario differs.
+Example output
+Friedman chi-square = 16.8
+p-value = 0.002
+If p < 0.05 → reject H₀ → scenarios differ → run post‑hoc tests.
+⭐ Step 3 — Run Holm‑corrected Wilcoxon signed‑rank tests
+This is the recommended method in machine‑learning research (Demsar, 2006).
+You compare every pair of scenarios, using:
+Wilcoxon signed‑rank test (paired, non‑parametric)
+Holm correction to control family‑wise error
+Example pairwise table (Random Forest)
+Comparison	Raw p	Holm p	Significant?
+A vs B	0.004	0.016	✔ Yes
+A vs C	0.012	0.036	✔ Yes
+A vs D	0.006	0.018	✔ Yes
+A vs E	0.41	0.41	✘ No
+B vs C	0.018	0.054	✘ No
+B vs E	0.009	0.027	✔ Yes
+C vs E	0.015	0.045	✔ Yes
+D vs E	0.022	0.066	✘ No
+This gives you a complete statistical map of how all scenarios compare.
+⭐ Step 4 — Interpret results
+You can now make strong, defensible statements like:
+“Scenario A significantly outperforms B, C, and D for Random Forest.”
+“Scenario E performs similarly to A, indicating that frequency discounting does not significantly change performance.”
+“Scenarios B, C, and D do not significantly differ from each other.”
+You can repeat the same analysis for Naive Bayes.
+⭐ Why this works for ANY model
+Hypothesis testing is based on:
+repeated measurements
+paired comparisons
+non‑parametric tests
+It does not depend on whether the classifier is:
+SVM
+Random Forest
+Naive Bayes
+Logistic Regression
+Neural Network
+As long as you have k‑fold CV results, the statistical tests are valid.

@@ -1,0 +1,6 @@
+Scenario,accuracy_mean,accuracy_std,precision_mean,precision_std,recall_mean,recall_std,f1_mean,f1_std
+Scenario 1: All retained,0.6624,0.0054,0.5749,0.0085,0.5843,0.0102,0.5788,0.0092
+Scenario 2: Stopwords removed,0.6678,0.0049,0.5826,0.0089,0.5858,0.0099,0.5835,0.0094
+Scenario 3: Punctuation removed,0.6616,0.0056,0.5743,0.0087,0.584,0.0104,0.5783,0.0094
+Scenario 4: Both removed,0.6667,0.0048,0.5818,0.0087,0.5848,0.0102,0.5826,0.0094
+Scenario 5: Frequency Discounting,0.6689,0.0051,0.5852,0.0071,0.587,0.0087,0.5847,0.008

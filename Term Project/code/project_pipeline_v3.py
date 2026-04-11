@@ -1,0 +1,127 @@
+import pandas as pd
+import numpy as np
+from sklearn.svm import LinearSVC
+import ast
+
+from cv_pipeline import run_all_scenarios_cv, run_statistical_tests
+
+
+BASE_DIR = '/Users/tanmay/Documents/TCD_Course_Material/TA/Term Project/Dataset'
+
+
+def load_data(file_path):
+    print(f"Loading data from {file_path}...")
+    try:
+        df = pd.read_csv(file_path, on_bad_lines='skip', engine='python')
+    except Exception as e:
+        print(f"Warning: Issue parsing {file_path}: {e}. Retrying with c engine...")
+        df = pd.read_csv(file_path, on_bad_lines='skip')
+
+    # Map rating to sentiment: 1-3 -> 0 (Negative), 4-6 -> 1 (Neutral), 7-10 -> 2 (Positive)
+    def map_sentiment(rating):
+        if rating <= 3.0:
+            return 0
+        elif rating <= 6.0:
+            return 1
+        else:
+            return 2
+
+    df['sentiment'] = df['rating'].apply(map_sentiment)
+
+    def parse_tokens(text):
+        try:
+            tokens = ast.literal_eval(text)
+            if isinstance(tokens, list):
+                return ' '.join(tokens)
+            return str(text)
+        except:
+            return str(text)
+
+    df['clean_text'] = df['content'].apply(parse_tokens)
+    return df['clean_text'].values, df['sentiment'].values
+
+
+def build_model():
+    """
+    Factory function — returns a fresh LinearSVC instance.
+
+    To swap in a different model (e.g. for a teammate's experiments), replace
+    the body of this function or pass a custom factory to run_all_scenarios_cv:
+
+        from sklearn.ensemble import RandomForestClassifier
+        model_factory = lambda: RandomForestClassifier(n_estimators=100, random_state=42)
+        cv_results, summary_df, fold_df = run_all_scenarios_cv(
+            scenarios, model_factory, n_splits=10, average='macro'
+        )
+    """
+    return LinearSVC(random_state=42, max_iter=2000, dual=True, class_weight='balanced')
+
+
+def main():
+    # Load each dataset once
+    print("Loading datasets...")
+    data_A = load_data(f"{BASE_DIR}/imdb62_A.csv")
+    data_B = load_data(f"{BASE_DIR}/imdb62_B.csv")
+    data_C = load_data(f"{BASE_DIR}/imdb62_C.csv")
+    data_D = load_data(f"{BASE_DIR}/imdb62_D.csv")
+
+    scenarios = [
+        {
+            'name':        'Scenario 1: All retained',
+            'X_text':      data_A[0],
+            'y':           data_A[1],
+            'discounting': False,
+        },
+        {
+            'name':        'Scenario 2: Stopwords removed',
+            'X_text':      data_B[0],
+            'y':           data_B[1],
+            'discounting': False,
+        },
+        {
+            'name':        'Scenario 3: Punctuation removed',
+            'X_text':      data_C[0],
+            'y':           data_C[1],
+            'discounting': False,
+        },
+        {
+            'name':        'Scenario 4: Both removed',
+            'X_text':      data_D[0],
+            'y':           data_D[1],
+            'discounting': False,
+        },
+        {
+            'name':        'Scenario 5: Frequency Discounting',
+            'X_text':      data_A[0],
+            'y':           data_A[1],
+            'discounting': True,
+        },
+    ]
+
+    # 10-fold stratified CV across all scenarios
+    cv_results, summary_df, fold_df = run_all_scenarios_cv(
+        scenarios=scenarios,
+        model_factory=build_model,
+        n_splits=10,
+        average='macro',   # macro-averaged for 3-class
+    )
+
+    # Save results
+    summary_df.to_csv('results_cv_v3.csv', index=False)
+    fold_df.to_csv('results_cv_v3_folds.csv', index=False)
+
+    print("\n=== CV Summary (mean ± std across 10 folds) ===")
+    print(summary_df.to_string(index=False))
+
+    # Statistical tests on F1 (primary metric for multi-class)
+    friedman, pairwise_df = run_statistical_tests(cv_results, metric='f1')
+    pairwise_df.to_csv('statistical_tests_v3.csv', index=False)
+
+    print("\nResults saved to:")
+    print("  results_cv_v3.csv          — mean/std summary per scenario")
+    print("  results_cv_v3_folds.csv    — per-fold raw values")
+    print("  statistical_tests_v3.csv   — Friedman + Wilcoxon/Holm pairwise tests")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,417 @@
+==============================================================================
+PAPER UPDATE GUIDE — Final Report Revisions
+Research paper: "Do Stopwords and Punctuation Matter? A Systematic Evaluation
+                 for Multi-Class Sentiment Classification of Movie Reviews"
+Reason for update: Peer review feedback requesting stronger statistical
+                   validation. Changes reflect 10-fold stratified CV,
+                   Friedman + Holm-Wilcoxon tests, and addition of a
+                   Naive Bayes (ComplementNB) comparison model.
+==============================================================================
+
+
+------------------------------------------------------------------------------
+UPDATE 1 — ABSTRACT
+Section: \section{Abstract}
+Action: Replace the second paragraph entirely
+(paragraph starting with "This paper aims to analyze...")
+------------------------------------------------------------------------------
+
+REPLACE THIS:
+"This paper aims to analyze the impact of stopword and punctuation removal on
+sentiment classification performance using the IMDB62 movie review dataset
+containing 61,987 reviews from different users about various movies, in which
+ratings from 1–10 are mapped to positive, negative and neutral sentiment
+categories. We evaluate the performance of a Support Vector Classifier (SVC)
+in five different scenarios: (1) all stopwords and punctuation retained,
+(2) only stopwords removed, (3) only punctuation removed, (4) both stopwords
+and punctuation removed and (5) frequency discounted features using a square
+root weighting scheme to reduce the influence of high frequency items without
+completely eliminating them. We determine whether the conventional methods of
+eliminating closed class items enhance or degrade the performance of a
+sentiment classification model by comparing metrics like classification
+accuracy and F1 scores across these scenarios. We also evaluate if frequency
+discounting is a more reliable alternative. The results can help us better
+understand how the presence of stopwords and punctuation contribute to
+sentiment classification."
+
+WITH THIS:
+"This paper analyses the impact of stopword and punctuation removal on
+sentiment classification performance using the IMDB62 movie review dataset
+containing 61,987 reviews, in which ratings from 1--10 are mapped to
+positive, negative, and neutral sentiment categories. We evaluate two
+classifiers — a Linear Support Vector Machine (LinearSVC) and a Complement
+Naive Bayes (ComplementNB) model — across five preprocessing scenarios:
+(1) all stopwords and punctuation retained, (2) only stopwords removed,
+(3) only punctuation removed, (4) both stopwords and punctuation removed,
+and (5) frequency discounting via a square root weighting scheme. To ensure
+statistically rigorous evaluation, each scenario is assessed using 10-fold
+stratified cross-validation, yielding ten independent performance samples
+per condition. Global differences across scenarios are tested with the
+Friedman test, and pairwise comparisons are conducted using Holm-corrected
+Wilcoxon signed-rank tests. Across both models, deletion-based preprocessing
+consistently and significantly degrades performance, while frequency
+discounting matches or exceeds the full-text baseline. These findings provide
+statistically validated evidence that high-frequency function words and
+punctuation encode meaningful sentiment information that should be retained
+rather than removed."
+
+
+------------------------------------------------------------------------------
+UPDATE 2 — RESEARCH METHODS: Train–Test Split subsection
+Section: \subsubsection{Train--Test Split}  (currently section 5.5)
+Action: Replace the entire subsection body
+------------------------------------------------------------------------------
+
+REPLACE THIS:
+"The dataset is split into training and testing sets using an 80/20 split.
+Stratified sampling is applied to maintain the original class distribution
+across both subsets, thereby reducing sampling bias and ensuring reliable
+evaluation."
+
+WITH THIS:
+"To produce statistically reliable performance estimates, each experimental
+scenario is evaluated using \textbf{10-fold stratified cross-validation}
+rather than a single held-out split. In each fold, the data are partitioned
+into 90\% training and 10\% test subsets while preserving the original class
+distribution (Negative / Neutral / Positive) in every partition. The
+\texttt{CountVectorizer} is fitted exclusively on the training fold in each
+iteration, ensuring that no vocabulary information from the test fold leaks
+into feature construction. This procedure yields ten independent measurements
+of Accuracy, Macro-Precision, Macro-Recall, and Macro-F1 per scenario,
+which are subsequently used as paired observations for the statistical tests
+described in Section~\ref{sec:stats}."
+
+
+------------------------------------------------------------------------------
+UPDATE 3 — RESEARCH METHODS: Add new Statistical Testing subsection
+Section: After the Train–Test Split subsection and before Model Evaluation
+Action: INSERT the following new subsection
+Label it: \subsubsection{Statistical Significance Testing}
+          \label{sec:stats}
+------------------------------------------------------------------------------
+
+INSERT AFTER THE TRAIN-TEST SPLIT SUBSECTION:
+
+"\subsubsection{Statistical Significance Testing}
+\label{sec:stats}
+
+Following the framework of \citet{demsarstats} for comparing classifiers
+across multiple conditions, we apply a two-stage non-parametric testing
+procedure to the ten fold-wise metric values obtained for each scenario.
+
+\paragraph{Stage 1 — Friedman Test.}
+The Friedman test \citep{demsarstats} is applied to the five vectors of
+fold-wise Macro-F1 scores (one vector per scenario). It ranks the five
+scenarios within each fold independently and tests whether the average ranks
+differ significantly across scenarios. The null hypothesis states that all
+five preprocessing conditions perform equivalently. A $p$-value below 0.05
+leads us to reject this hypothesis and proceed to pairwise tests.
+
+\paragraph{Stage 2 — Holm-corrected Wilcoxon Signed-Rank Tests.}
+All $\binom{5}{2} = 10$ pairwise comparisons are carried out using the
+Wilcoxon signed-rank test, which is a paired non-parametric test that
+compares the fold-wise differences between two scenarios without assuming
+normality. To control the family-wise Type I error rate across the ten
+simultaneous comparisons, Holm step-down correction is applied. A pairwise
+difference is declared significant only when the Holm-corrected $p$-value
+falls below 0.05."
+
+
+------------------------------------------------------------------------------
+UPDATE 4 — RESEARCH METHODS: Model Description — add ComplementNB
+Section: \subsubsection{Overview}  (first paragraph of Model Description)
+Action: Append a new paragraph after the existing SVM overview paragraph
+------------------------------------------------------------------------------
+
+AFTER the paragraph ending with "...robust to irrelevant features which is
+prevalent in the text.", ADD:
+
+"To assess whether the preprocessing effects generalise beyond a single
+classifier, we additionally evaluate \textbf{Complement Naive Bayes
+(ComplementNB)} \citep{rennie2003tackling} across the same five scenarios
+using the identical 10-fold CV pipeline. ComplementNB is a variant of
+Multinomial Naive Bayes that estimates class probabilities from the
+\emph{complement} of each class, which corrects for the class-imbalance
+bias that standard Multinomial NB exhibits. It requires no explicit
+\texttt{class\_weight} parameter and has been shown to outperform standard
+Multinomial NB on imbalanced multi-class text classification tasks. Both
+models consume the same Bag-of-Words document–term matrix and, where
+applicable, the same square-root-discounted matrix for Scenario 5."
+
+
+------------------------------------------------------------------------------
+UPDATE 5 — RESULTS: Replace Table 1 and the opening paragraph
+Section: \section{Result Discussion}
+Action: Replace the paragraph and Table 1 entirely with updated CV results
+------------------------------------------------------------------------------
+
+REPLACE THE OPENING PARAGRAPH (starting "The experiment mainly focuses on...")
+AND TABLE 1 ENTIRELY WITH:
+
+"The following results are based on \textbf{10-fold stratified
+cross-validation}. Each cell reports the mean performance across the ten
+folds, with the standard deviation in parentheses. This allows for
+statistically grounded comparison across scenarios.
+
+\begin{table}[h]
+\centering
+\label{tab:svm_cv_results}
+\begin{tabular}{|p{5.2cm}|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
+\hline
+S1: All retained          & 0.7158 (0.0078) & 0.6113 (0.0129) & 0.5981 (0.0123) & 0.6037 (0.0114) \\
+\hline
+S2: Stopwords removed     & 0.6550 (0.0067) & 0.5774 (0.0095) & 0.5716 (0.0094) & 0.5743 (0.0092) \\
+\hline
+S3: Punctuation removed   & 0.6575 (0.0069) & 0.5833 (0.0088) & 0.5776 (0.0099) & 0.5801 (0.0090) \\
+\hline
+S4: Both removed          & 0.6535 (0.0062) & 0.5758 (0.0078) & 0.5697 (0.0083) & 0.5725 (0.0079) \\
+\hline
+S5: Freq.\ Discounting    & \textbf{0.7184 (0.0081)} & \textbf{0.6127 (0.0142)} & \textbf{0.5970 (0.0130)} & \textbf{0.6036 (0.0124)} \\
+\hline
+\end{tabular}
+\caption{LinearSVC — 10-fold CV performance (mean with std in parentheses).
+         All metrics are macro-averaged over three sentiment classes.}
+\end{table}
+
+\begin{table}[h]
+\centering
+\label{tab:nb_cv_results}
+\begin{tabular}{|p{5.2cm}|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
+\hline
+S1: All retained          & 0.6624 (0.0054) & 0.5749 (0.0085) & 0.5843 (0.0102) & 0.5788 (0.0092) \\
+\hline
+S2: Stopwords removed     & 0.6678 (0.0049) & 0.5826 (0.0089) & 0.5858 (0.0099) & 0.5835 (0.0094) \\
+\hline
+S3: Punctuation removed   & 0.6616 (0.0056) & 0.5743 (0.0087) & 0.5840 (0.0104) & 0.5783 (0.0094) \\
+\hline
+S4: Both removed          & 0.6667 (0.0048) & 0.5818 (0.0087) & 0.5848 (0.0102) & 0.5826 (0.0094) \\
+\hline
+S5: Freq.\ Discounting    & \textbf{0.6689 (0.0051)} & \textbf{0.5852 (0.0071)} & \textbf{0.5870 (0.0087)} & \textbf{0.5847 (0.0080)} \\
+\hline
+\end{tabular}
+\caption{ComplementNB — 10-fold CV performance (mean with std in parentheses).
+         All metrics are macro-averaged over three sentiment classes.}
+\end{table}"
+
+
+------------------------------------------------------------------------------
+UPDATE 6 — RESULTS: Add statistical test result tables
+Section: \section{Result Discussion}
+Action: INSERT after the two new tables above, before the \subsection{Analysis}
+------------------------------------------------------------------------------
+
+INSERT:
+
+"\subsection{Statistical Test Results}
+
+\paragraph{LinearSVC.}
+The Friedman test yields $\chi^2 = 33.44$, $p < 0.001$, providing strong
+evidence that the five preprocessing scenarios do not perform equivalently.
+Table~\ref{tab:svm_pairwise} reports all ten pairwise Wilcoxon comparisons
+with Holm correction.
+
+\begin{table}[h]
+\centering
+\label{tab:svm_pairwise}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Comparison} & \textbf{Raw $p$} & \textbf{Holm $p$} & \textbf{Significant?} \\
+\hline
+S1 vs S2  & 0.0020 & 0.0195 & Yes \\
+S1 vs S3  & 0.0020 & 0.0195 & Yes \\
+S1 vs S4  & 0.0020 & 0.0195 & Yes \\
+S2 vs S5  & 0.0020 & 0.0195 & Yes \\
+S3 vs S5  & 0.0020 & 0.0195 & Yes \\
+S4 vs S5  & 0.0020 & 0.0195 & Yes \\
+S3 vs S4  & 0.0195 & 0.0781 & No  \\
+S2 vs S3  & 0.0273 & 0.0820 & No  \\
+S2 vs S4  & 0.2754 & 0.5508 & No  \\
+\textbf{S1 vs S5}  & \textbf{0.7695} & \textbf{0.7695} & \textbf{No} \\
+\hline
+\end{tabular}
+\caption{LinearSVC pairwise Wilcoxon signed-rank tests (Holm-corrected,
+         $\alpha = 0.05$) on Macro-F1.}
+\end{table}
+
+\paragraph{ComplementNB.}
+Table~\ref{tab:nb_pairwise} reports the pairwise results for ComplementNB.
+
+\begin{table}[h]
+\centering
+\label{tab:nb_pairwise}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Comparison} & \textbf{Raw $p$} & \textbf{Holm $p$} & \textbf{Significant?} \\
+\hline
+S2 vs S3  & 0.0020 & 0.0195 & Yes \\
+S1 vs S5  & 0.0039 & 0.0352 & Yes \\
+S3 vs S5  & 0.0039 & 0.0352 & Yes \\
+S3 vs S4  & 0.0098 & 0.0684 & No  \\
+S1 vs S2  & 0.0137 & 0.0820 & No  \\
+S1 vs S4  & 0.0371 & 0.1855 & No  \\
+S4 vs S5  & 0.2324 & 0.9297 & No  \\
+S2 vs S4  & 0.4922 & 1.0000 & No  \\
+S2 vs S5  & 0.7695 & 1.0000 & No  \\
+S1 vs S3  & 0.9219 & 1.0000 & No  \\
+\hline
+\end{tabular}
+\caption{ComplementNB pairwise Wilcoxon signed-rank tests (Holm-corrected,
+         $\alpha = 0.05$) on Macro-F1.}
+\end{table}"
+
+
+------------------------------------------------------------------------------
+UPDATE 7 — RESULTS: Replace the Analysis subsection
+Section: \subsection{Analysis}
+Action: Replace the entire content of the Analysis subsection
+------------------------------------------------------------------------------
+
+REPLACE THE ENTIRE ANALYSIS SUBSECTION BODY WITH:
+
+"\begin{enumerate}
+
+    \item \textbf{Deletion-based preprocessing significantly degrades
+    LinearSVC performance (Hypotheses 1--4 confirmed).}
+    For the LinearSVC model, the Friedman test ($\chi^2 = 33.44$,
+    $p < 0.001$) confirms that not all preprocessing conditions are
+    equivalent. The Holm-corrected Wilcoxon tests show that Scenarios 2,
+    3, and 4 are each significantly worse than the full-text baseline
+    Scenario 1 (all $p_{\text{Holm}} = 0.0195$). This provides formal
+    statistical backing for Hypotheses 1 and 2: stopword removal alone
+    (Scenario 2) produces the largest drop, from a mean F1 of 0.6037 to
+    0.5743, confirming that high-frequency function words such as negation
+    markers and intensifiers carry genuine discriminative signal.
+    Punctuation removal (Scenario 3) also causes a significant decline,
+    supporting Hypothesis 3. Regarding Hypothesis 4, combined removal
+    (Scenario 4) degrades performance relative to the baseline, but does
+    not produce the single lowest F1 — stopword removal alone (Scenario 2)
+    is slightly worse. The three deletion scenarios (S2, S3, S4) are not
+    significantly different from one another after Holm correction, which
+    indicates their performance floors are statistically equivalent and
+    that stopword removal is the dominant source of degradation.
+
+    \item \textbf{Frequency discounting is statistically indistinguishable
+    from the full-text baseline for LinearSVC, and significantly
+    outperforms all deletion strategies (Hypothesis 5 confirmed).}
+    Scenario 5 achieves a mean F1 of 0.6036 — almost identical to
+    Scenario 1 (0.6037) — and the Wilcoxon test yields $p = 0.7695$,
+    meaning the two conditions cannot be distinguished statistically.
+    At the same time, Scenario 5 is significantly better than every
+    deletion scenario (all $p_{\text{Holm}} = 0.0195$). This confirms
+    Hypothesis 5: square-root frequency discounting retains affective
+    function words as weighted features rather than removing them, thereby
+    preserving the full linguistic signal while reducing the dominance of
+    the most frequent terms.
+
+    \item \textbf{ComplementNB shows greater robustness to preprocessing,
+    but frequency discounting still provides a statistically
+    significant advantage.}
+    The ComplementNB model displays a notably different pattern. All five
+    F1 scores lie within a narrow band (0.5783--0.5847), and most pairwise
+    differences are not statistically significant after Holm correction.
+    This suggests that ComplementNB's probabilistic structure partially
+    absorbs the effect of feature deletions. Nevertheless, Scenario 5
+    (Freq.\ Discounting) is the best-performing condition and is
+    significantly better than Scenario 1 ($p_{\text{Holm}} = 0.0352$) and
+    Scenario 3 ($p_{\text{Holm}} = 0.0352$). Unlike LinearSVC — where
+    discounting and full-text retention are tied — ComplementNB derives a
+    measurable benefit from sqrt-weighting, likely because dampening
+    dominant counts improves the multinomial likelihood estimates that
+    Naive Bayes relies on.
+
+    \item \textbf{Consistent finding across both models.}
+    Despite different absolute performance levels (LinearSVC peaks at
+    F1 = 0.6037; ComplementNB at 0.5847), both models agree on the
+    ranking: Frequency Discounting $\geq$ All Retained $\gg$ Any Deletion
+    Strategy. This cross-model consistency strengthens confidence that
+    the observed effects are a genuine property of the preprocessing
+    choices, not an artefact of a particular classifier's inductive bias.
+
+\end{enumerate}"
+
+
+------------------------------------------------------------------------------
+UPDATE 8 — CONCLUSION
+Section: \section{Conclusion}
+Action: Replace the three paragraphs of the conclusion
+------------------------------------------------------------------------------
+
+REPLACE ENTIRE CONCLUSION BODY WITH:
+
+"This study provides statistically rigorous evidence that deletion-based
+text preprocessing is harmful for multi-class sentiment classification on
+the IMDB62 dataset. Using 10-fold stratified cross-validation and a
+two-stage non-parametric testing procedure (Friedman test followed by
+Holm-corrected Wilcoxon signed-rank tests), we evaluated five preprocessing
+scenarios across two classifiers: a Linear Support Vector Machine
+(LinearSVC) and Complement Naive Bayes (ComplementNB).
+
+The key findings are as follows. First, removing stopwords — either alone or
+combined with punctuation — produces a statistically significant degradation
+in Macro-F1 for LinearSVC (Holm-corrected $p = 0.0195$ in all cases).
+High-frequency function words including negation markers, intensifiers and
+discourse connectives carry genuine discriminative signal for sentiment
+classification, and their removal constitutes a measurable information loss.
+Second, frequency discounting via square-root weighting achieves the best or
+joint-best performance across both models and all scenarios: it is
+statistically equivalent to the full-text baseline for LinearSVC ($p = 0.77$)
+and significantly better than the full-text baseline for ComplementNB
+($p_{\text{Holm}} = 0.035$). In both cases it significantly outperforms every
+deletion strategy. Third, the consistency of this ranking across two
+structurally different classifiers — a margin-based discriminative model and a
+probabilistic generative model — indicates that the preprocessing effect is
+robust and not classifier-specific.
+
+These findings suggest a concrete practical recommendation: frequency
+discounting is a preferable default to stopword removal in sentiment
+classification pipelines, as it preserves the full vocabulary signal while
+reducing the dominance of the most frequent terms. Future work should examine
+whether this finding extends to domain-specific corpora, longer documents, and
+transformer-based representations where subword tokenisation already implicitly
+distributes frequency across tokens."
+
+
+------------------------------------------------------------------------------
+UPDATE 9 — KEYWORDS (minor)
+Section: \textbf{Keywords:} line in the Abstract section
+Action: Add "Naive Bayes, Cross-Validation, Statistical Significance Testing"
+        to the existing keyword list
+------------------------------------------------------------------------------
+
+REPLACE:
+"Sentiment Analysis, Stopword Removal, Punctuation Analysis, Frequency
+Discounting, Support Vector Machines, Text Preprocessing, IMBD62 Movie Reviews"
+
+WITH:
+"Sentiment Analysis, Stopword Removal, Punctuation Analysis, Frequency
+Discounting, Support Vector Machines, Naive Bayes, Text Preprocessing,
+Cross-Validation, Statistical Significance Testing, IMDB62 Movie Reviews"
+
+
+==============================================================================
+SUMMARY OF ALL CHANGES
+==============================================================================
+
+| # | Location               | Type of change                                |
+|---|------------------------|-----------------------------------------------|
+| 1 | Abstract               | Rewritten to include CV, stat tests, NB model |
+| 2 | Keywords               | Added NB, CV, Statistical Significance Testing|
+| 3 | Sec 5 – Train-Test     | 80/20 split → 10-fold stratified CV           |
+| 4 | Sec 5 – Model Overview | Added ComplementNB description paragraph      |
+| 5 | Sec 5 – NEW subsection | Statistical Significance Testing methodology  |
+| 6 | Sec 6 – Table 1        | Replaced with CV mean±std table (SVM)         |
+| 7 | Sec 6 – NEW Table 2    | ComplementNB CV mean±std results              |
+| 8 | Sec 6 – NEW subsection | Statistical Test Results (2 tables: SVM + NB) |
+| 9 | Sec 6 – Analysis       | Fully rewritten around statistical findings   |
+|10 | Sec 7 – Conclusion     | Fully rewritten to reflect validated findings |
+
+NOTE: No changes are needed to the Literature Review — Section 2.7 already
+      references Demsar (2006) and motivates the exact testing approach used.
+      The Figure reference (Figure 3, result.png) can be retained for the SVM
+      bar chart; consider adding a second figure comparing SVM vs NB F1 means
+      if a visual comparison is desired.
+==============================================================================

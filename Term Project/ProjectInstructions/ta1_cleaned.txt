@@ -1,0 +1,725 @@
+    Before the beginning:
+
+    1. Some sessions may be provided in a live-online mode, for example, where individuals
+       suspect having a communicable illness (it is better for all for such individuals to participate
+       live online than to risk communicating illnesses to others).
+
+    2. Do not come to class with an illness that is communicable to others in a classroom
+       context.
+
+    3. Please note TCD guidance on maintaining health in the community (https://tcd.
+       blackboard.com/bbcswebdav/pid-2984683-dt-content-rid-22193053_1/xid-22193053_
+       1).
+
+    4. Please note TCD guidance on the conventions of etiquette associated with TCD online
+       events (see Blackboard files: “TCD-Online-Event-Behaviour-Guidance.pdf”).
+
+    5. Please note the TCD official statement about lecture materials and participation, “Stu-
+       dent Online Teaching Advice Notice” (see Blackboard files: “TCD-Student-Online-Teaching-
+       Advice-Notice.pdf”).
+
+    6. Making individual recordings of the events, whether live, in the room, or online, is pro-
+       hibited.
+
+    7. Time will be allocated at the start and end of each session in which it will be possible
+       to ask questions or share observations; however, please feel welcome to intervene with
+       questions or comments in between.
+
+    8. If in the lecture room, please do not talk privately with people near you. If you have a
+       question or comment, please share it with the whole group.
+       The structure of the room is something like that of a megaphone, amplifying chatter from
+       the tiered seats, making it loud and distracting at the podium.
+       If you cause such distraction, I will ask that you leave the room.
+
+
+
+
+0                                                                                ©Carl Vogel 2026
+                                   Text Analytics
+                                Dr. Carl Vogel, FTCD
+                        Professor in Computational Linguistics
+                          Computational Linguistics Group
+                                Trinity College Dublin
+                                    vogel@tcd.ie
+                                     January 9, 2026
+
+
+                                           Abstract
+         Working methods and some introductory concepts in text analytics are addressed.
+
+
+Contents
+1 The subject                                                                               3
+  1.1 Language . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    3
+  1.2 Cognitive and behavioral response: analysis of what texts express . . . . . . .       5
+  1.3 Cognitive and behavioral hermeneutics: analysis of what texts reveal . . . . . .      5
+  1.4 Cautions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    5
+
+2 Approach                                                                                  6
+
+3 The mode of analysis                                                                      6
+  3.1 Text corpus construction . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    6
+  3.2 Analysis of texts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   6
+  3.3 Statistical tests applied to comparing text distributions . . . . . . . . . . . . .   7
+  3.4 Interpretation of results with respect to theoretical questions . . . . . . . . . .   7
+
+4 Module agenda                                                                             7
+
+5 Administrative mechanics                                                                  8
+  5.1 Coursework . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    9
+      5.1.2 Research notebook . . . . . . . . . . . . . . . . . . . . . . . . . . . .       9
+      5.1.3 Research article summaries . . . . . . . . . . . . . . . . . . . . . . .        9
+      5.1.4 Term papers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       9
+
+                                               1
+CONTENTS                                                                           CONTENTS
+
+
+         5.1.5 Peer review . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    10
+    5.2 Team allocation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     10
+    5.3 Assessed vs. non-assessed work . . . . . . . . . . . . . . . . . . . . . . . . .      10
+    5.4 Assessed work deadlines . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     10
+    5.5 Submission guidelines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     12
+    5.6 Balance of assessments . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      15
+    5.7 Attendance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    15
+    5.8 Class meetings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    15
+    5.9 Office hour . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   16
+    5.10 Contacting lecturing staff . . . . . . . . . . . . . . . . . . . . . . . . . . . .   16
+
+6 Good research practice                                                                      16
+
+7 Reading for next week                                                                       16
+
+References                                                                                    16
+
+
+
+
+2                                                                            ©Carl Vogel 2026
+                                                                              1 THE SUBJECT
+
+
+1     The subject
+1.1    Language
+    • scope
+      Every natural language sentence is finite in length; it is always possible to generate a new
+      sentence of any language that has never been uttered before. Each natural language is
+      evidently infinite.
+
+      (1) This is a sentence of English.
+      (2) *This are a sentence of English.
+      (3) This is a sentence of English uttered on January 22, 2026 in the Lloyd Building.
+      (4) This is a sentence of English uttered on January 22, 2026 in the Lloyd Building,
+          near the O’Reilly Institute, on the grounds of Trinity College Dublin.
+      (5) This is a sentence of English uttered on January 22, 2026 in the Lloyd Building,
+          near O’Reilly Institute, on the grounds of Trinity College Dublin, where it continues:
+          “riverrun, past Eve and Adam’s, from swerve of shore to bend of bay, brings us by
+          a commodius vicus of recirculation back to Howth Castle and Environs” and so on,
+          all together now.
+      (6) and so on, ad infinitum
+
+    • purpose
+
+        – communication?
+          Note the circumstances of Flying Tiger Flight 66 attempting a stop-over in Kuala
+          Lumpur on February 19, 1989, in which the air traffic control directive, “descend
+          two four zero zero” was evidently understood as “descend to four zero zero”
+          The aircraft, directed to be at 2,400 feet, reduced altitude to 400 feet and crashed
+          into a hill 437 feet above sea level, killing the four people on the cargo aircraft
+          (Cushing, 1994).
+        – thought?
+          Languages support representation of reality:
+              ∗ Naming entities: This is the Lloyd Building.
+              ∗ Labelling categories and their attributes: Birds fly.
+           Consider the affordances of natural language, in terms of representing not just
+           what is, but also what is not:
+              ∗ Negation: There are no artichokes.
+              ∗ The past: There were artichokes.
+              ∗ The future: I will grow artichokes.
+              ∗ Alternative realities: If it had rained, the leaves would not be wilted.
+
+3                                                                             ©Carl Vogel 2026
+1.1 Language                                                             1 THE SUBJECT
+
+
+             ∗ Deontic conventions: One ought to obey the traffic signals.
+          Language appears to support memory, supplying redundant indices of objects and
+          relations in reality (Hinkin, Harris, & Miranda, 2014).
+          Language appears to support reasoning, supplying access to valid inference on the
+          basis of syntactic form, largely independent of semantic content:
+          If something pldlnthrps then it mrkdlnfpts
+          This pldlnthrps
+          Therefore, it mrkdlnfpts
+        – bonding?
+
+
+
+
+           *Image source: https://en.wikipedia.org/wiki/Japanese_macaque – last
+           verified, January 2026.
+           An influential theory of language evolution claims that language provides a more
+           efficient form of allogrooming than literal nit-picking (Dunbar, 1998).
+
+    • formal models, presented using frameworks supplied by
+
+        – discrete mathematics
+        – formal language theory
+        – formal logic
+        – models of computation
+
+    • evidence
+
+        – thought
+        – speech
+
+4                                                                            ©Carl Vogel 2026
+1.2 Cognitive and behavioral response: analysis of what texts express       1 THE SUBJECT
+
+
+         – paralinguistic content: gaze, gesture, head-movement, laughter
+         – text
+
+1.2    Cognitive and behavioral response: analysis of what texts express
+    • content analysis (e.g. question answering)
+    • epistemic assessment (e.g. assimilation vs. rejection)
+    • emotive evaluation (e.g. sentiment filtering)
+
+1.3    Cognitive and behavioral hermeneutics: analysis of what texts
+       reveal
+    • provenence evaluation (e.g. van Halteren, 2008)
+    • profiling
+
+         – gender (e.g. Argamon, Koppel, Fine, & Shimoni, 2003)
+         – age (e.g. Pennebaker & Stone, 2003)
+         – personality (e.g Luyckx & Daelemans, 2008)
+         – linguistic proficiency (e.g. Kincaid, Fishburne Jr., Rogers, & Chissom, 1975)
+         – idiolect change (e.g. Klaussner, Vogel, & Bhattacharya, 2021)
+
+    • language change (e.g. Buckley & Vogel, 2019)
+    • economics (e.g Devitt & Ahmad, 2007)
+    • politics (e.g. Klemmensen, Hobolt, & Hansen, 2007)
+    • deception (e.g. Humpherys, Moffitt, Burns, Burgoon, & Felix, 2011)
+    • technology (e.g. Emms, 2013)
+    • weather (e.g. Hannak, Anderson, Barrett, Lehmann, Mislove, & Riedwald, 2012)
+
+1.4    Cautions
+As in any science, the individuation of fundamental particles is a nontrivial exercise. At a
+pre-theoretical level, it is trivial to see that English is not French or German. However, it is
+non-trivial to specify the necessary and sufficient conditions that determine what amounts to a
+language and without providing a circular definition.
+
+    • circular: A language is the set of sentences its native speakers recognize as such.
+
+    • counter-intuitive: A language is the set of sentences that producers and audiences find
+      mutually intelligible.
+
+
+5                                                                            ©Carl Vogel 2026
+                                                                  3 THE MODE OF ANALYSIS
+
+
+         – This means that for many Danes and Swedes, Danish and Swedish are the same
+           language.
+         – This means that matched French-English bilinguals speak a different language to
+           mono-lingual French and mono-lingual English speakers.
+
+    No individual language is a static object. Language changes over time, with the influences
+of new technology, cultural borrowings, “regularizations”, grammaticalizations, and the creative
+energy of novel metaphor.
+
+
+2     Approach
+I think it is the role of a professor to make clear an individualized perspective on concepts urgent
+to a discipline, providing insights into what is “between the lines” in any standard text in the
+field from which a student might read foundational material. Successful research-led teaching
+is infused with the the teacher’s own research experience and involves students as researchers
+even as they assimilate foundational material. The role of the professor is to advance the
+field partly with his or her own direct research contributions and partly by helping
+students quickly become equals and advancers of the field themselves.
+     This module will address formal foundational theory and method that underpin theoretical
+linguistics and text analysis conducted within computational linguistics. These ideas will be used
+as an excercise in research, towards establishing firm foundations and creating new knowledge.
+Module participants engage as researchers, in solidifying mastery of the foundational concepts
+and in pursuing research on a designated topic; participants engage individually and as part of
+a team.
+
+
+3     The mode of analysis
+3.1    Text corpus construction
+While multi-modal corpora are available and of considerable interest, our primary focus will be
+on the text component of any corpus though possibly in relation to other parallel signals – in
+any case, parallel signals will be treated in a form that is effectively equivalent to text. Corpora
+will be collected in light of research questions to be explored, assembling texts within categories
+and cross-classifications of interest.
+
+3.2    Analysis of texts
+Sometimes, close reading of texts will be necessary in order to provide categorizations and
+cross-classifications of texts and their components. This may be with respect to the analytical
+frameworks presented in the module. Sometimes this will be achieved using extant tools for
+labelling parts of texts with respect to categories supplied by theoretical linguistics (e.g. part
+
+
+6                                                                               ©Carl Vogel 2026
+3.3 Statistical tests applied to comparing text distributions            4 MODULE AGENDA
+
+
+of speech tagging, constituent analysis, etc.). Some of these tools depend upon deep learning
+techniques; however, neural network models are not the focus of this module.
+
+3.3    Statistical tests applied to comparing text distributions
+Fundamentally, contingency table analysis will provide the basis of our reasoning. Where appro-
+priate, other statistical models and tools from machine learning will be deployed (e.g. regression,
+decision trees, principal component analysis, support vector machines, long short-term mem-
+ory models, etc.). The necessary details of using such models (including determining whether
+assumptions prerequisite to their use are satisfied) will be addressed in lectures and outside
+readings, in due course.
+    If an effect is statistically significant, it can be illuminating to know the extent to which
+features identified as relevant inform prediction and to what degree of accuracy the cross-
+categorizations involved.
+    It is seldom edifying to race machine learning models against each other to know
+which one, in which setting, has greatest accuracy, and it is never edifying to do
+so without quantifying the statistical significance of any such differences reported.
+
+3.4    Interpretation of results with respect to theoretical questions
+Questions addressed may be those with focus on categories of readers (e.g. as listed in §1.2)
+or of authors and separate variables (e.g. as listed in §1.3).
+
+
+4     Module agenda
+The module will address aspects of:
+
+    • Formal language theory
+    • Dependency and constituency in language models
+    • Formal grammar specification
+    • Meaning preserving syntactic alternations, text-entailment, text-associations
+    • Formal logics
+    • Finite state methods for representation and reasoning, model theoretic semantics
+    • Statistical Language Processing
+    • Methods and applications of text classification
+    • Sentiment and metaphor analysis
+
+Learning Outcomes On successful completion of this module, students should be able to:
+
+       IS4LO1 Grasp the scope and limitations of finite state methods;
+
+7                                                                              ©Carl Vogel 2026
+                                                          5 ADMINISTRATIVE MECHANICS
+
+
+       IS4LO2 Apply concepts from model theory within content analytics;
+       IS4LO3 Analyze, using qualitative and quantitative methods, entailments in natural
+           language texts, distinguishing entailments from suggestions and associations;
+       IS4LO4 Comprehend and apply methods of sentiment analysis and metaphor under-
+           standing;
+       IS4LO5 Demonstrate ability to collaborate within a designated team;
+       IS4LO6 Provide constructive criticism within a scholarly peer review exercise;
+       IS4LO7 Collaboratively compose a scholarly research article informed by the literature,
+           novel exercises in text analytics and responding to peer review.
+
+
+5     Administrative mechanics
+ECTS allocation: 5 credits
+Module code: CS7IS4
+Module title: Text Analytics
+Contact Hours: 2 hours per week.
+Module Learning Aims This module aims to provide students with a deep appreciation of
+    the theory and practice of text analysis techniques.
+Assessment: Annual Assessment = 100% Coursework
+      A paper on an agreed topic will be due at the start of the final week of the semester.
+      The paper will be constructed as a candidate submission to the International Workshop
+      on Computational Semantics.
+      Assessment in the supplemental session will be based 100% on a supplemental term paper.
+Self-directed Activities: Lectures will provide notes that suggest accompanying readings.
+      The notes do not constitute the lectures but provide the backbone formalism and examples
+      to be discussed during any section. Participants are encouraged to explore the suggested
+      readings. Formal notation is unavoidable, and participants are encouraged to develop
+      their own “cheat sheets” to speed familiarity. Notational variation will exist, and it is
+      open for participants to raise discussion of those points in the lecturers. Participants are
+      encouraged to explore additional readings as well.
+Recommended Readings:
+         • Module handouts
+         • See works by: Dagan, Roth, Sammons, and Zanzotto (2013), Levin (1993), Jurafsky
+           and Martin (2009), Liu (2014), Manning and Schütze (1999), Nastase, Nakov,
+           Séaghdha, and Szpakowicz (2013), Nugues (2006).
+
+8                                                                             ©Carl Vogel 2026
+5.1 Coursework                                            5 ADMINISTRATIVE MECHANICS
+
+
+5.1     Coursework
+The coursework involves development of a bibliography, reading, writing of summaries, synthe-
+sizing reading, amassing corpora, developing research questions, documenting methods, analyz-
+ing texts towards answering questions, documenting results and their ramifications. Sometimes
+other tasks, such as addressing thought problems, will be involved. Some of the more structured
+elements of the coursework are described in the next sections (§5.1.2, §5.1.3, §5.1.4 and §5.1.5)
+
+5.1.2   Research notebook
+It is required to keep an individual notebook associated with readings, ideas, evaluation, and
+related matters such as they inform the group paper and its individual component. The research
+notebook is not a personal diary; rather, it is a record of an individual’s own evolving thinking
+about the research topic (which culminates in the term paper) and provides a record of individual
+inputs. These should be treated as public texts – texts that will be read by others. The research
+notebooks are to be maintained in an electronic format to be submitted weekly.
+     Further detail of the submission process will be provided separately.
+
+5.1.3   Research article summaries
+It is required to read and submit written summaries of designated articles (files in PDF form,
+as described later). Summaries are to be composed in one’s own words, a synthetic view of the
+contents of the article at hand. A text that exceeds two pages is probably not a summary and
+a text that comprises a few sentences is probably a restatement of the title and abstract alone.
+
+5.1.4   Term papers
+The final paper is to be developed partially individually and partially from collective effort –
+from small group work on a research question agreed between a group and the lecturer, each
+individual within the group providing an individual synthesis and contribution statement that is
+to be signed by the other group members.
+
+
+9                                                                            ©Carl Vogel 2026
+5.2 Team allocation                                        5 ADMINISTRATIVE MECHANICS
+
+
+    The paper is submitted in two stages – a first draft at the end of the sixth week of term and
+a final draft in the final week of term. The initial draft is put through a peer-review process and
+the final draft should be a complete work that responds to peer review and the considerations
+addressed within the module over the intervening period.
+    The final paper will be submitted through SafeAssign or Turnitin, via Blackboard, and thus
+will be subject to plagiarism detection analysis.
+
+5.1.5    Peer review
+The papers in the draft submitted at the mid-term point will be evaluated by peer review,
+however, the assessment that contributes to each student’s final mark is the evaluation of the
+peer review rather than the peer review itself.
+   Further detail of the submission process will be provided separately.
+
+5.2     Team allocation
+As noted in §5.1.4, the main term paper will be a group effort. The research topics will be
+allocated after the second week of term.
+
+5.3     Assessed vs. non-assessed work
+Non-assessed work is more or less weekly in nature. This involves responding to readings and
+incremental tasks towards the final paper.
+    The non-assessed readings are those which are mentioned in the lecture notes but which
+are not designated for weekly discussions.
+    The assessments for this module are designed to make the work for all deadlines fall within
+the teaching term. Thus, when teaching term is completed, so too is work for the module.
+    The final essay and archives must be submitted by mid morning of the Monday after the
+teaching term has ended.
+
+5.4     Assessed work deadlines
+     • Research notebook submission, each relevant Thursday, 10:00 in the morning
+     • Reading summaries, each relevant Thursday, 10:00 in the morning
+     • Thursday, February 26 16:00 – Paper First Draft (including Literature Review, Research
+       Questions, Research Methods)
+     • Monday, March 09, 10:00 – Paper First Draft peer reviews
+     • Monday, April 13,
+
+         1. 10:00 – Final Paper Research Project Replicability Archive
+
+
+10                                                                             ©Carl Vogel 2026
+5.4 Assessed work deadlines                              5 ADMINISTRATIVE MECHANICS
+
+
+          2. 10:30 – Final Paper
+
+   Late submissions are not accepted.
+   Files must be submitted in the correct format. Resubmissions are not accepted
+after the deadline.
+   Weekly expectations are as follow:
+     1. January 22 – First meeting
+
+     2. January 29 –        (b) research notebook (10:00)
+         (c) reading summary (10:00)
+
+     3. February 5 –
+
+        (a) research notebook (10:00)
+        (b) reading summary (10:00)
+
+     4. February 12 –
+
+        (a) research notebook (10:00)
+        (b) reading summary (10:00)
+
+     5. February 19 –
+
+        (a) research notebook (10:00)
+        (b) reading summary (10:00)
+
+     6. February 26 –
+
+        (a) research notebook (10:00)
+        (b) reading summary (10:00)
+         (c) Term paper first draft, including Literature Review, Research Questions, Research
+             Methods (16:00)
+
+     7. March 2-6 Study Week
+
+     8. (a) March 9 (Monday) – peer reviews (10:00)
+        (b) March 12 – research notebook (10:00)
+
+     9. March 19 –
+
+11                                                                         ©Carl Vogel 2026
+5.5 Submission guidelines                                   5 ADMINISTRATIVE MECHANICS
+
+
+         (a) research notebook (10:00)
+         (b) reading summary (10:00)
+
+ 10. March 26 –
+         (a) research notebook (10:00)
+         (b) reading summary (10:00)
+ 11. April 2 –
+         (a) research notebook (10:00)
+         (b) reading summary (10:00)
+ 12. April 9 – research notebook (10:00)
+ 13. April 13 (Monday)
+         (a) Final research project replicability archive (10:00)
+         (b) Final paper (10:30)
+
+5.5      Submission guidelines
+     1. Upload your submission to the appropriate category within Blackboard.
+     2. Submit files only, using the portable document format (PDF) only.
+        Submissions of MS word documents, for example, will not receive credit.
+     3. In what follows “SURNAME” refers to the student’s surname; if this name contains a
+        space within it (as might happen if the surname is a composition of a number of individual
+        names), the space should be replaced by a hyphen – there should be no spaces in the
+        name of any file submitted. The same considerations apply to “FIRSTNAME”.
+12                                                                             ©Carl Vogel 2026
+5.5 Submission guidelines                                               5 ADMINISTRATIVE MECHANICS
+
+
+     5. Format the file for readings using the following schema:
+           SURNAME-FIRSTNAME-STUDENTNUMBER-CS7IS4-READINGS-WEEKn.pdf
+           where n is replaced by the cardinal number corresponding to the ordinal position of the
+           week among all of the weeks of the teaching term.1
+           Notice the use of allcaps.
+           Notice the lack of spaces.
+           Notice the use of hyphens rather than underscores.
+           Submissions that do not conform to this scheme will not receive credit.
+
+     6. Format the file for research notebooks using the following schema:
+           SURNAME-FIRSTNAME-STUDENTNUMBER-CS7IS4-RESEARCH-NOTEBOOK-ENTRY-
+           WEEKn.pdf
+           where n is replaced by the cardinal number corresponding to the ordinal position of the
+           week among all of the weeks of the teaching term.
+           Notice the use of allcaps.
+           Notice the lack of spaces.
+           Notice the use of hyphens rather than underscores.
+           Submissions that do not conform to this scheme will not receive credit.
+
+     7. Format the file for the mid-term paper using the following schema:
+           SURNAME-FIRSTNAME-STUDENTNUMBER-CS7IS4-MIDTERM-GROUPn-ROLE.pdf
+           where n is replaced by the cardinal number corresponding the name of the group to which
+           the student is assigned for the purposes of the term research project, and where ROLE
+           is the principle ROLE agreed by the student within the group.
+           The PDF should include a scan of a statement of the student’s individual contribution to
+           the group paper, signed by all group members. Each member of the group must submit
+           the signed statements for all members of the group.
+           Notice the use of allcaps.
+           Notice the lack of spaces.
+           Notice the use of hyphens rather than underscores.
+           Submissions that do not conform to this scheme will not receive credit.
+
+     8. Format the file for the peer reviews using the following schema:
+           SURNAME-FIRSTNAME-STUDENTNUMBER-CS7IS4-PEER-REVIEWS.zip
+     1
+         Note: this does not refer to the ordinal position of the reading; rather the ordinal position of the week.
+
+
+
+
+13                                                                                             ©Carl Vogel 2026
+5.5 Submission guidelines                                  5 ADMINISTRATIVE MECHANICS
+
+
+        Where the zip file contains one plain text file for each paper reviewed, and thus contains
+        all of the reviews written by the student.
+        The file for each of the reviews should be named using the following convention for a
+        revew by the student of the paper submitted by each member of GROUP n:
+        SURNAME-FIRSTNAME-STUDENTNUMBER-CS7IS4-REVIEW-GROUPn.txt
+        Notice the use of allcaps.
+        Notice the lack of spaces.
+        Notice the use of hyphens rather than underscores.
+        Submissions that do not conform to this scheme will not receive credit.
+
+     9. Format the file for the final paper using the following schema:
+        SURNAME-FIRSTNAME-STUDENTNUMBER-CS7IS4-FINAL-GROUPn-ROLE.pdf
+        where n is replaced by the cardinal number corresponding the name of the group to which
+        the student is assigned for the purposes of the term research project, and where ROLE
+        is the principle ROLE agreed by the student within the group.
+        The PDF should include a scan of a statement of the student’s individual contribution to
+        the group paper, signed by all group members.
+        Notice the use of allcaps.
+        Notice the lack of spaces.
+        Notice the use of hyphens rather than underscores.
+
+ 10. Format the file for the final paper research replicability archive using the following schema:
+        SURNAME-FIRSTNAME-STUDENTNUMBER-CS7IS4-GROUPn-ROLE-ARCHIVE.Extension
+        where n is replaced by the cardinal number corresponding the name of the group to which
+        the student is assigned for the purposes of the term research project, and where ROLE
+        is the principle ROLE agreed by the student within the group,
+        and where Extension is replaced by either “zip” or “tar.gz”, as appropriate to the archive
+        method, which must be either zip or a gzipped tar file,
+        Notice the use of allcaps.
+        Notice the lack of spaces.
+        Notice the use of hyphens rather than underscores.
+        The archive shoulc contain:
+
+        a.   The treated data analyzed;
+        b.   CSV files containing the summary measurements of data;
+        c.   Any code written for to produce the treated data, the CSV or analyze the columns
+             of data therein;
+
+14                                                                             ©Carl Vogel 2026
+5.6 Balance of assessments                                   5 ADMINISTRATIVE MECHANICS
+
+
+      d.   Any additional materials that are wished to be submitted.
+
+      in files that are clearly labelled according to their sort.
+      Submissions that do not conform to this scheme will not receive credit.
+
+5.6    Balance of assessments
+ Type                                  Assessment scale             Overall weight
+ Research notebook                          binary                  0.06
+ Reading summaries                          binary                  0.06
+ Mid-term paper + Final Archive             binary                  0.01
+ Attendance/Participation                   binary                  0.01
+ Mid-term paper peer reviews                graded                  0.35
+ Final paper                                graded                  0.50
+
+5.7    Attendance
+There will be an attendance sheet circulating the room each class; please sign beside your name
+if you are present in the room.
+    Do not sign the name of anyone else on their behalf.
+
+5.8    Class meetings
+Two hours are scheduled for each week (13:00 to 14:50 on Thursdays). Class meetings will
+be conducted in person and, sometimes when necessary, technology permitting, also via Black-
+board, using Collaborate Ultra.
+    It is intended that class sessions commence and complete on time.
+    Sometimes, one hour will be lecture and the other hour will include discussion of a reading
+designated for summary in the week, or a comparable event more interactive than a lecture.
+Sometimes, sessions will be devoted to group meetings to discuss the term research projects.
+    On the days that the second hour addresses the discussion of a reading, a summary of the
+reading is to be submitted no later than 10:00 that morning.
+    Talking in class, except to the entire room, is not permitted. If you must communicate
+privately with another person near you, all involved should leave the room to do so.
+    Questions are welcome, at any stage. During moments when the sessions are being recorded,
+you might prefer not to speak in order to avoid having your voice (which is your own personal
+data) recorded with the session. Time will be allocated each week to facilitate questions and
+discussion. Questions are to be posed for the benefit of the entire class, and not
+individually at the start or ends of sessions.
+
+
+
+
+15                                                                                   ©Carl Vogel 2026
+5.9 Office hour                                                                       REFERENCES
+
+
+5.9      Office hour
+An office hour conducted via MS Teams will be scheduled and announced by lecturing staff;
+meetings during the office hour are admitted by prior appointment only.
+
+5.10      Contacting lecturing staff
+Making contact via BlackBoard is unreliable; contact lecturing staff directly via email provided.
+
+
+6        Good research practice
+It is important to be familiar with the official policy of Trinity College Dublin with respect
+to good research practice.2 This includes matters of scholarship, data retention and research
+ethics approval.
+
+
+7        Reading for next week
+Please read and summarize the article by Golbeck, Robles, Edmondson, and Turner (2011).
+
+
+References
+Argamon, S., Koppel, M., Fine, J., & Shimoni, A. R. (2003). Gender, Genre, and Writing Style
+     in Formal Written Texts. Text, 23 (3), 321–346.
+Buckley, K. & Vogel, C. (2019). Using Character N-grams to Explore Diachronic Change in
+     Medieval English. Folia Linguistica Historica, 40 (2), 249–299.
+Cushing, S. (1994). Fatal Words: Communication Clashes and Aircraft Crashes. University of
+     Chicago Press.
+Dagan, I., Roth, D., Sammons, M., & Zanzotto, F. M. (2013). Recognizing Textual Entailment:
+     Models and Applications. San Rafael, CA: Morgan Claypool.
+Devitt, A. & Ahmad, K. (2007). Sentiment Polarity Identification in Financial News: A
+      Cohesion-based Approach. In Proceedings of the 45th Annual Meeting of the Associ-
+      ation of Computational Linguistics, pp. 984–991 Prague, Czech Republic. Association for
+      Computational Linguistics.
+Dunbar, R. (1998). Grooming, Gossip, and the Evolution of Language. Harvard University
+     Press.
+     2
+     See Trinity Policy on Good Research Practice, V1.1, Date of Issue: 15 February 2024, https://www.
+tcd.ie/media/tcd/about/policies/pdfs/Policy-on-Good-Research-Practice_1.1.pdf – last veri-
+fied, January 2026.
+
+
+
+
+16                                                                               ©Carl Vogel 2026
+REFERENCES                                                                       REFERENCES
+
+
+Emms, M. (2013). Dynamic EM in Neologism Evolution, pp. 286–293. Springer Berlin Heidel-
+    berg.
+Golbeck, J., Robles, C., Edmondson, M., & Turner, K. (2011). Predicting Personality from
+     Twitter. In 2011 IEEE International Conference on Privacy, Security, Risk and Trust
+     and IEEE International Conference on Social Computing, pp. 149–156. IEEE Computer
+     Organization.
+Hannak, A., Anderson, E., Barrett, L. F., Lehmann, S., Mislove, A., & Riedwald, M. (2012).
+     Tweetin’ in the Rain: Exploring Societal-scale Effects of Weather. In Breslin, J., Ellison,
+     N. B., Shanahan, J. G., & Tufekci, Z. (Eds.), Proceedings of the Sixth International AAAI
+     Conference on Weblogs and Social Media, pp. 479–482. AAAI.
+Hinkin, M. P., Harris, R. J., & Miranda, A. T. (2014). Verbal Redundancy Aids Memory for
+      Filmed Entertainment Dialogue. The Journal of Psychology, 148 (2), 161–176.
+Humpherys, S. L., Moffitt, K. C., Burns, M. B., Burgoon, J. K., & Felix, W. F. (2011). Iden-
+    tification of fraudulent financial statements using linguistic credibility analysis. Decision
+    Support Systems, 50 (3), 585 – 594.
+Jurafsky, D. & Martin, J. H. (2009). Speech and Language Processing: An Introduction to
+      Natural Language Processing, Computational Linguistics, and Speech Recognition. New
+      Jersey, US: Pearson/Prentice Hall.
+Kincaid, J. P., Fishburne Jr., R. P., Rogers, R. L., & Chissom, B. S. (1975). Derivation of New
+      Readability Formulas (Automated Readability Index, FOG Count and Flesch Reading Ease
+      Formula) for Navy Enlisted Personnel. Tech. rep. Research Branch Report 8-75, Naval
+      Technical Training Command, US Navy.
+Klaussner, C., Vogel, C., & Bhattacharya, A. (2021). Aspects of linguistic ageing in literary
+      authors across time. Journal of Language Modelling, 9 (2), 195–223.
+Klemmensen, R., Hobolt, S. B., & Hansen, M. E. (2007). Estimating policy positions using
+    political texts: An evaluation of the Wordscores approach. Electoral Studies, 26 (4), 746
+    – 755.
+Levin, B. (1993). English Verb Classes and Alternations: A Preliminary Investigation. University
+      of Chicago Press.
+Liu, B. (2014). Sentiment Analysis and Opinion Mining. Cambridge University Press.
+Luyckx, K. & Daelemans, W. (2008). Using Syntactic Features to Predict Author Personality
+     from Text. In The 20th Joint International Conference of the Association for Literary and
+     Linguistic Computing, and the Association for Computers and the Humanities (Digital
+     Humanities 2008), pp. 146–149. The Association for Literary and Lingustic Computing.
+Manning, C. & Schütze, H. (1999). Foundations of Statistical Natural Language Processing.
+     Cambridge, MA: MIT Press.
+Nastase, V., Nakov, P., Séaghdha, D. Ó., & Szpakowicz, S. (2013). Semantic Relations Between
+     Nominals. San Rafael, CA: Morgan Claypool.
+
+
+17                                                                           ©Carl Vogel 2026
+REFERENCES                                                                 REFERENCES
+
+
+Nugues, P. M. (2006). An Introduction to Language Processing with Perl and Prolog. Berlin:
+     Springer.
+Pennebaker, J. W. & Stone, L. D. (2003). Words of Wisdom: Language Use Over the Life
+     Span. Journal of Personality and Social Psychology, 85 (2), 291–301.
+van Halteren, H. (2008). Source Language Markers in EUROPARL Translations. In Proceedings
+     of the 22nd International Conference on Computational Linguistics (Coling 2008), pp.
+     937–944.
+
+
+
+
+18                                                                      ©Carl Vogel 2026
+

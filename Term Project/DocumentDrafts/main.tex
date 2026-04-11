@@ -1,0 +1,512 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{graphicx}  %%% for including graphics
+\usepackage{url}       %%% for including URLs
+\usepackage{times}
+\usepackage{natbib}
+\usepackage[left=25mm, right=25mm, top=25mm, bottom=25mm]{geometry}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{amsmath} 
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+
+\title{Do Stopwords and Punctuation Matter? A Systematic Evaluation for Multi-Class Sentiment Classification of Movie Reviews}
+\date{}
+
+\author{Drishya Dinesh\\
+       Trinity College Dublin\\
+       Dublin, Ireland\\
+       \texttt{drishyad@tcd.ie}
+       \
+  \and Parth Deshmukh\\
+       Trinity College Dublin\\
+       Dublin, Ireland\\
+       \texttt{deshmukp@tcd.ie}
+       \
+  \and Mukul Ghare\\
+       Trinity College Dublin\\
+       Dublin, Ireland\\
+       \texttt{gharem@tcd.ie}
+       \
+  \and Tanmay Ghosh\\
+       Trinity College Dublin\\
+       Dublin, Ireland\\
+       \texttt{ghoshta@tcd.ie}
+       \
+  \and Raghav Manish Gupta\\
+       Trinity College Dublin\\
+       Dublin, Ireland\\
+       \texttt{guptar3@tcd.ie}
+       \
+  \and Yilin Wen\\
+       Trinity College Dublin\\
+       Dublin, Ireland\\
+       \texttt{wenyi@tcd.ie}
+}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\section{Abstract}
+High frequency function words (stop words) and punctuation are routinely removed in natural language processing, largely for the reason of reducing feature dimensionality and the assumption that these items contribute little discriminative information. These closed class items although carry stylistic, structural and sometimes affective information that may be relevant for tasks such as sentiment classification.\\ \\
+This paper analyses the impact of stopword and punctuation removal on
+sentiment classification performance using the IMDB62 movie review dataset
+containing 61,987 reviews, in which ratings from 1--10 are mapped to
+positive, negative, and neutral sentiment categories. We evaluate two
+classifiers, a Linear Support Vector Machine (LinearSVC) and a Complement
+Naive Bayes (ComplementNB) model, across five preprocessing scenarios:
+(1) all stopwords and punctuation retained, (2) only stopwords removed,
+(3) only punctuation removed, (4) both stopwords and punctuation removed, and (5) frequency discounting via a square root weighting scheme. To ensure
+statistically rigorous evaluation, each scenario is assessed using 10-fold stratified cross-validation, yielding ten independent performance samples per condition. Global differences across scenarios are tested with the Friedman test, and pairwise comparisons are conducted using Holm-corrected Wilcoxon signed-rank tests. Across both models, deletion-based preprocessing
+consistently and significantly degrades performance, while frequency
+discounting matches or exceeds the full-text baseline. These findings provide statistically validated evidence that high-frequency function words and punctuation encode meaningful sentiment information that should be retained rather than removed.
+
+\medskip
+\noindent\textbf{Keywords:} Sentiment Analysis, Stopword Removal, Punctuation Analysis, Frequency
+Discounting, Support Vector Machines, ComplementNB, Text Preprocessing, Statistical Significance Testing, IMDB62 Movie Reviews
+
+
+\section{Introduction}
+Sentiment analysis is an important task in natural language processing (NLP). It is widely used in film reviews, social media monitoring and product feedback analysis. The main goal is to extract people's feelings and opinions from the text to help understand public opinion. As more and more people share comments online, the demand for algorithms to automatically detect emotions is increasing, and this field is developing rapidly.\\ \\
+In most sentiment classification systems, text preprocessing is a necessary first step. A very common practice is to remove stopwords and punctuation marks. There are usually two main reasons for this. Firstly, people usually think that these high-frequency words and punctuation marks do not have much useful information to distinguish different emotions. Secondly, removing them can make the vocabulary smaller, so that the model will run faster. These ideas are widely accepted, and the removal of stopwords and punctuations has become a standard practice for many natural language processing processes.\\ \\
+However, this common practice may deserve more careful examination. Although the stop words itself may not have a clear meaning, it does play a role in sentiment expression. If it is removed without thinking, it may damage the accuracy of sentiment classification. In addition, the results of previous research on this topic are also uneven. Some studies believe that it is beneficial, some studies point out its disadvantages, and some studies find no significant effect. This inconsistency shows that the problem has not been really solved and requires more systematic research.\\ \\
+To make up for this gap, this study explores the impact of removing stop words and punctuations on sentiment classification. The study adopted the IMDB62 film review dataset and conducted controlled experiments. We test the same classifier under five different pretreatment conditions to observe its performance changes. In addition to directly deleting words, this article also tries an alternative method called "frequency discounting" - which adopts a square root weighting scheme to achieve preprocessing by reducing the influence of frequent words and punctuation marks. The study aims to verify whether this method is a better text preprocessing scheme.\\ \\
+The rest of this article will first discuss the relevant research work, and then clearly put forward the research problems. Then we describe the data set and experimental settings, and discuss the results of the five different preprocessing methods. Finally, we summarise the research findings and put forward the future research direction.
+
+
+
+\section{Research Questions}
+
+\noindent The following research questions organise our empirical investigation. The central question driving this study is:
+
+\medskip
+
+\noindent\textbf{Main RQ:} Does the removal of stopwords and punctuation affect sentiment classification performance in text analysis, and if yes, how?
+
+\noindent To answer this, we break it down into five sub-questions, each corresponding directly to one experimental condition tested in this study.
+
+\medskip
+
+\noindent\textbf{RQ1:} Does retaining all stopwords and punctuation produce the strongest sentiment classification performance compared to all other preprocessing conditions?
+
+\noindent\textbf{Hypothesis 1:} The full-text condition will produce the strongest classification performance across all five conditions. It preserves the complete linguistic signal including negation markers, affective function words and expressive punctuation.
+
+\medskip
+
+\noindent\textbf{RQ2:} Does removing only stopwords improve, maintain, or degrade sentiment classification accuracy relative to the full-text baseline?
+
+\noindent\textbf{Hypothesis 2:} Removing stopwords alone will degrade classification accuracy relative to the full-text baseline. Standard stopword lists include negation markers such as not, no and never, and intensity modifiers such as very and too, whose removal risks altering the apparent sentiment of a review.
+
+\medskip
+
+\noindent\textbf{RQ3:} Does removing only punctuation improve, maintain, or degrade sentiment classification accuracy relative to the full-text baseline?
+
+\noindent\textbf{Hypothesis 3:} Removing punctuation alone will produce a measurable degradation in classification accuracy. Affective punctuation marks such as exclamation points, question marks and ellipses encode evaluative intensity and emotional tone whose loss reduces the signal available to the classifier.
+
+\medskip
+
+\noindent\textbf{RQ4:} Does removing both stopwords and punctuation together produce greater performance degradation than removing either one in isolation?
+
+\noindent\textbf{Hypothesis 4:} The joint removal condition will yield the lowest classification accuracy of all five conditions. Removing both simultaneously eliminates two independent dimensions of affective signal, producing an additive degradation greater than either removal alone.
+
+\medskip
+
+\noindent\textbf{RQ5:} Does frequency discounting via a square root weighting scheme outperform binary stopword removal, and does it approach or exceed full-text performance?
+
+\noindent\textbf{Hypothesis 5:} Frequency discounting will outperform complete stopword removal and approach full-text performance. Reducing the weight of high-frequency items rather than deleting them retains affect-bearing function words as features, making it a more principled alternative to complete deletion.
+
+\section{Literature Review}
+\subsection{The Origins and Assumptions of Stopword Removal}
+ \citet{luhn1958automatic} proposed removing both the most and least frequent words from document collections as a part of its process for identifying significant words to improve retrieval efficiency. It is specifically mentioned that common, frequently used words such as pronouns, propositions etc carry low discriminating value. These low value words are included in nearly every exclusion list in NLP toolkits. The idea that high frequency words carry low information value and add noise has been challenged by both theoretical and empirical work, yet the practice of removing them remains largely unchanged in many NLP pipelines.
+
+\subsection{Stopword and Punctuation Removal and Sentiment Classification}
+\citet{symeonidis2018preprocessing} evaluate sixteen text preprocessing techniques for sentiment analysis across two Twitter datasets and multiple classifiers. Removing punctuation consistently reduced accuracy, while reducing repeated punctuation improved performance, reflecting its affective role. Many stopwords were found to modify or convey sentiment, suggesting their removal should be reconsidered.\\
+\citet{saif2014stopwords} evaluate six stopword removal methods across six Twitter datasets. Pre-compiled stopword lists consistently harmed performance, suppressing negation markers and intensifiers while increasing data sparsity. Removing only singleton words reduced the feature space by 65\% while maintaining accuracy, offering the best practical tradeoff. The key finding is that \emph{discriminative value}, not raw frequency, should govern word removal, directly motivating frequency discounting over deletion.\\
+Some studies find that stopword inclusion or exclusion has little effect on performance. \citet{dipietro2022stopwords} frames stopword selection as a classifier optimization problem, using iterative deletion to retain only words whose removal harms accuracy. The resulting list outperforms the NLTK standard stoplist and preserves high-frequency sentiment words such as \emph{not}, \emph{never}, and \emph{very}. Though computationally expensive, this confirms that the optimal boundary is task-dependent, reinforcing the case for continuous frequency discounting over binary deletion.
+
+\subsection{Punctuation as an Information Channel}
+\citet{darmon2018pull} provide a detailed analysis of punctuation sequences as a textual signal independent of lexical content. This paper demonstrates that punctuation patterns encode genre, syntactic rhythm and authorial habit, and that punctuation alone carries substantial discriminating information between text categories. For sentiment analysis, this is relevant because punctuation marks such as exclamation marks and ellipses carry affective load. Their reflexive removal, treated as equivalent to stopword removal in most NLP pipelines may constitute a measurable information loss, which we will investigate explicitly in our experimental design.
+\subsection{TF-IDF and Frequency-Sensitive Feature Weighting}
+\cite{das2023comparative} compares TF-IDF and N-Gram feature extraction across six classifiers on the IMDB and Amazon Alexa datasets, finding that TF-IDF consistently outperforms N-Gram and achieves a maximum accuracy of 93.81\% with Random Forests. \cite{das2018tfidf} extend this further by combining TF-IDF with a Next Word Negation (NWN) technique, tagging words immediately following negation cues as semantically inverted, and achieving 89.91\% accuracy on IMDB, outperforming standard TF-IDF baselines. 
+\citet{wang2012baselines} show that simple uni-gram and bi-gram features which are weighted with log-count ratios and derived from Naive Bayes (the NB-SVM approach) achieve state-of-the-art sentiment classification. These findings show that how frequency information is used matters more than whether common words are deleted. Binary word presence often outperforms raw term frequency, suggesting diminishing returns from repeated occurrences and providing an empirical basis for sublinear frequency discounting. Furthermore, bi-grams such as "not good" or "barely watchable" aid sentiment classification, indicating that stopword removal destroys sentiment-bearing constructions. Together, these results motivate frequency discounting as a safer alternative to deletion.
+\subsection{The Square Root Rule as a Frequency Discounting Mechanism}
+The Square Root Law, as explained by \cite{fielding1975voting}, was used to study voting systems. The law says that in larger groups where people vote randomly, the count of their votes doesn't increase linearly, it increases according to the square root of their size. In our project, we aim to apply the same idea on word frequencies. Frequency of common words like “the,” “is,” and “was” is very high and would dominate the model causing inaccuracies, while on the other hand if all such words are removed we could loose meaningful sentiment information. Thus, we apply a square root law to word frequencies on all words to model them correctly. This theoretical motivation can be backed by a study in \cite{dogan2019term}. This paper analyses the effects of different term frequency factors across seven supervised term weighting schemes, finding that a square root function-based term frequency factor (SQRT\_TF) outperforms both raw term frequency (TF) and logarithmic term frequency (LOG\_TF). this motivates the study of whether frequency discounting is a more principled alternative to the outright deletion of stopwords and punctuation.
+\subsection{Sentiment Analysis: Broader Context}
+The strong evidence that deleting stop words may cause problems partly comes from the findings of the study of negative words. \citet{wiegand2010survey} points out that removing negations from the text may cause poor performance of sentiment classifiers. \citet{councill2010great} discussed that removing punctuations affect the performance of strict rule-based classifiers which highly depend on words like "not", "but also", etc. Thus, it highlights that treating punctuation removal and frequent word removal cannot be treated as two separate problems. 
+\citet{kumar2025sentiment} demonstrated the usefulness of SVC for text based sentiment analysis and the appropriateness of TF-IDF for down-weighting common, less significant phrases while up-weighting informative words. This study removes punctuation and stopwords as part of its pipeline, but it doesn't assess the effect of each step separately, so it is unclear if these removals improve or degrade classification accuracy. This gap motivates our hypothesis if stopwords, punctuation and frequency discounting affect performance of classifiers on an individual level.
+\subsection{Statistical Significance Testing Across Datasets}
+
+%\citet{demsarstats} describes a common statistical framework for comparing the performance of machine learning models across various datasets. The author explains that good statistical testing would need repeated measurements of performance (e.g. accuracy, AUC) instead of single measurements which is typically acquired by cross-validation (CV) or repeated stratified random split of training and test data sets. This is the reason why we use 10-fold cross validation so as to get fold-wise performance samples in every preprocessing scenario. To compare a dataset with more than two data sets, the author suggests using Friedman test, as a strong non parametric alternative to ANOVA, and then using post hoc Wilcoxon signed rank tests with Holm correction to control family wise error (Type 1 Error). The Friedman test will rank the five scenarios for each CV fold individually and compare the average ranks to illustrate whether or not any of the situations gives significantly different results. Wilcoxon signed rank test ranks the differences in fold wise accuracy between two preprocessing situations and makes a comparison of the ranks to identify the difference between positive and negative rank differences to decide whether one scenario outperforms the other. These methods guide the design of our analysis pipeline. We first consider each fold as a paired measure across scenarios then apply the Friedman test to identify any overall differences and apply Holm-corrected Wilcoxon tests to determine which preprocessing strategies significantly vary.
+\citet{demsarstats} provides a statistical framework for comparing machine learning models across datasets, recommending repeated performance measurements via cross-validation rather than single estimates. This motivates our use of 10-fold cross-validation to obtain fold-wise samples across preprocessing scenarios. For comparisons involving more than two conditions, the author recommends the Friedman test as a non-parametric alternative to ANOVA, followed by post-hoc Holm-corrected Wilcoxon signed-rank tests to control family-wise error. Following this framework, we treat each fold as a paired observation, apply the Friedman test to detect overall differences, and use Holm-corrected Wilcoxon tests to identify which preprocessing strategies differ significantly.
+
+\subsection{Synthesis and Research Gap}
+The literature shows that stopwords and punctuation often carry useful sentiment information, and removing them can hurt accuracy by suppressing negation markers and affective function words. While TF-IDF reduces the weight of frequent terms, it cannot resolve negation without additional handling. No prior study has jointly examined frequency discounting, punctuation removal, and stopword removal within a single framework. This work addresses that gap by individually evaluating each preprocessing choice and their combinations on sentiment classification.
+
+\section{Research Methods}
+\subsection{Dataset Description}
+The dataset used in this research is a movie review dataset - IMDB62. It is publically available on Hugging Face website tasksource/imdb62 and was compiled originally by \cite{seroussi2014authorship}. The dataset consists of 61,987 user generated movie reviews. Each review has six fields: reviewID, userID, itemID, rating, review title and the main review text. The rating field is a numerical value from 1-10, which is used as a label for review sentiment. For the purpose of this study, reviews with ratings 1-3 (5,933 reviews) are classified as negative, reviews with rating 4-6 (19,611 reviews) are classified as neutral and reviews with rating 7-10 (36,443 reviews) are classified as positive. These classifications are done directly on the rating number without any kind of preprocessing on the dataset.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.42\linewidth]{dataset_description.png}
+    \caption{Distribution of User Reviews Across Sentiment Categories (Negative, Neutral, Positive)}
+    \label{fig:placeholder}
+\end{figure}
+
+\noindent The informal and natural style of the review text makes the IMDB62 dataset well suited for understanding the role of stopwords and punctuations in sentiment analysis. Stopwords, specifically words like "no" "not" and "but" that have negative notation can strongly affect sentiment analysis. Punctuations such as exclamation marks, questions marks also contain information about emotions which is crucial for the task at hand. Since both these features occur consistently in the reviews, the dataset provides a strong foundation for evaluating whether removing stopwords and punctuation affects sentiment analysis. 
+\\ \\
+\noindent Figure 2 provides an overview of the workflow used in this study, from preprocessing the IMDB62 dataset to model evaluation. Each component of the workflow is explained in detail in the following sections.
+
+\begin{figure}[H]
+    \centering
+\includegraphics[width=1.05\linewidth, height = 4cm]{workflow.png}
+    \caption{End‑to‑end Workflow for IMBD62 Sentiment Classification}
+    \label{fig:placeholder}
+\end{figure}
+
+
+\subsection{Data Preprocessing}
+\subsubsection{Dataset Preparation}
+
+To investigate the impact of stopwords and punctuation on sentiment analysis of movie reviews, three additional datasets were derived from the original IMDB62 dataset by applying the following transformations to the \emph{title} and \emph{content} columns:
+
+\begin{enumerate}
+    \item \textbf{Stopwords Removed:} All stopwords were identified and removed using the standard stopword list provided by the NLTK library.
+    \item \textbf{Punctuation Removed:} All punctuation symbols, as defined by the \texttt{string.punctuation} list in Python, were identified and removed.
+    \item \textbf{Both Stopwords and Punctuation Removed:} Both stopwords and punctuation symbols were removed by combining the two transformations described above.
+\end{enumerate}
+
+\subsubsection{Text Preprocessing Pipeline}
+
+A consistent preprocessing pipeline was applied to the \emph{title} and \emph{content} columns across all datasets. The following pipeline was used for preprocessing:
+
+\begin{enumerate}
+    \item \textbf{Removing Non-Unicode Characters:} Non-Unicode characters (e.g., emojis) were identified using the regex pattern \verb|r'[^\x00-\x7F]+'| and these were replaced with an empty string.
+    \item \textbf{Lowercasing:} All of the text was converted to lowercase using Python's built-in \verb|str.lower()| method.
+    \item \textbf{Stopword / Punctuation Removal:} Depending on the dataset variant, stopwords, punctuation, or both were removed.
+    \item \textbf{Tokenization:} The text was split into tokens using \texttt{word\_tokenize} from the \texttt{nltk.tokenize} module.
+    \item \textbf{Lemmatization:} Each token was reduced to its base form using the \texttt{WordNet-Lemmatizer} from the \texttt{nltk.stem} module.
+\end{enumerate}
+
+\subsection{Model Description and Implementation}
+
+\subsubsection{Overview}
+Using a classic machine learning pipeline, this paper performs a multi-class sentiment classification of movie reviews from the IMDB62 dataset. The method incorporates data preprocessing, Bag of Words feature extracting, frequency discounting and a linear Support Vector Machine (SVM) classifier. The reason why Support Vector Machines (SVMs) are preferred in text classification is because they can deal with high-dimensional sparse vectors very effectively and can effectively scale with large vocabularies. They are also robust to irrelevant features which are prevalent in the text.\\
+To assess whether the preprocessing effects generalise beyond a single
+classifier, we additionally evaluate \textbf{Naive Bayes
+Model (ComplementNB)} [\citet{wang2012baselines}] across the same five scenarios
+using the identical 10-fold CV pipeline. ComplementNB is a variant of
+Multinomial Naive Bayes that estimates class probabilities from the
+\emph{complement} of each class, which corrects for the class-imbalance
+bias that standard Multinomial NB exhibits. It requires no explicit
+\texttt{class\_weight} parameter and has been shown to outperform standard
+Multinomial NB on imbalanced multi-class text classification tasks. Both
+models consume the same Bag-of-Words document–term matrix and, where
+applicable, the same square-root-discounted matrix for Scenario 5.
+
+\subsubsection{Data Loading and Sentiment Mapping}
+The process of modelling starts with ingestion of the datasets in CSV format using a custom $load\_data()$ procedure. The function has fault-tolerant parsing which can handle irregularities in the source files. The numerical ratings in every dataset, on the scale of 1-10 are encoded into three categories of sentiment:
+\begin{itemize}\itemsep0.1em
+    \item Negative (0): ratings 1–3
+    \item Neutral (1): ratings 4–6
+    \item Positive (2): ratings 7–10
+\end{itemize}
+This mapping helps to convert the ordinal rating variable into categorical target variable which can be used for supervised classification. The review text itself is stored in form of a string of a list of tokens.
+
+\subsubsection{Feature Extraction using Bag of Words}
+The Bag of Words model is used to generate textual features in Python with the help of the CountVectorizer() function. The vectoriser creates a sparse document-term matrix with each value being the frequency of a token in a document. A minimum document frequency of 5 is used to eliminate the rare terms which would not provide any meaningful contribution to the classification performance. This representation is the best for linear models and scales well even for large vocabularies.
+
+\subsubsection{Frequency Discounting}
+Inorder to test Hypothesis 5, we apply the square‑root frequency discounting to the document–term matrix which is given by: $x \rightarrow \sqrt{x}$. This modification helps to reduce the impact of very common tokens without completely getting rid of them (\cite{dogan2019term}). This method is known to improve performance in text classification by reducing the dominance of high‑frequency but low‑information terms like stopwords.
+
+\subsubsection{Train-Test Split}
+To produce statistically reliable performance estimates, each experimental
+scenario is evaluated using \textbf{10-fold stratified cross-validation}
+rather than a single held-out split. In each fold, the data is partitioned
+into 90\% training and 10\% test subsets while preserving the original class
+distribution (Negative / Neutral / Positive) in every partition. The
+\texttt{CountVectorizer} is fitted exclusively on the training fold in each
+iteration, ensuring that no vocabulary information from the test fold leaks
+into feature construction. This procedure yields ten independent measurements
+of Accuracy, Macro-Precision, Macro-Recall, and Macro-F1 per scenario,
+which are subsequently used as paired observations for the statistical tests
+described in Section~\ref{sec:stats}. 
+
+\subsubsection{Statistical Significance Testing}\label{sec:stats}
+Following the framework of \citet{demsarstats} for comparing classifiers
+across multiple conditions, we apply a two-stage non-parametric testing
+procedure to the ten fold-wise metric values obtained for each scenario.
+\paragraph{Stage 1 - Friedman Test.}
+The Friedman test \citep{demsarstats} is applied to the five vectors of
+fold-wise F1 scores (one vector per scenario). It ranks the five
+scenarios within each fold independently and tests whether the average ranks
+differ significantly across scenarios. The null hypothesis states that all
+five preprocessing conditions perform equivalently. A $p$-value below 0.05
+leads us to reject this hypothesis and proceed to pairwise tests.
+\paragraph{Stage 2 - Holm-corrected Wilcoxon Signed-Rank Tests.}
+All $\binom{5}{2} = 10$ pairwise comparisons are carried out using the
+Wilcoxon signed-rank test, which is a paired non-parametric test that
+compares the fold-wise differences between two scenarios without assuming
+normality. To control the family-wise Type I error rate across the ten
+simultaneous comparisons, Holm step-down correction is applied. A pairwise
+difference is declared significant only when the Holm-corrected $p$-value
+falls below 0.05.
+
+\subsubsection{Classification Models Used:}
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Linear Support Vector Machine (SVM):}
+Linear SVMs attempt to determine a hyperplane that optimally separates the classes i.e. maximize the margin between them (\cite{SVM2}). For multi class classification, LinearSVC uses a one v/s rest strategy where it trains one classifier per class, each distinguishing that class from all others. Each classifier distinguishes one class from all others, and the final prediction corresponds to the class whose model yields the highest decision score (\cite{SVM}). 
+For each class k, the SVM solves :
+\[\min _{\mathbf{w_{\mathnormal{k}}},b_k,\xi _i}\quad \frac{1}{2}\| \mathbf{w_{\mathnormal{k}}}\| ^2+C\sum _{i=1}^N\xi _i\]
+subject to:
+\[y_{i,k}(\mathbf{w_{\mathnormal{k}}^{\mathnormal{\top }}x_{\mathnormal{i}}}+b_k)\geq 1-\xi _i\]
+where $w$: weight vector defining the hyperplane, $b$: bias term, $\xi_i$: slack variables allowing margin violations, $C$: regularisation parameter, $y_i \in \{-1, +1\}$: if sample i belongs to class k then 1 else -1 and $\mathbf{x}_i$: feature vector for sample $i$.\\
+The final prediction is:
+\[\hat {y}=\arg \max _k(\mathbf{w_{\mathnormal{k}}^{\mathnormal{\top }}x}+b_k)\]
+
+A $class\_weight='balanced'$ parameter is passed during model definition as the IMDB62 dataset shows class imbalance. Here, Positive reviews are more common than negative and neutral ones.
+If the model is trained without adjustment it may over‑predict the majority class and falsely achieve high accuracy while performing poorly on minority classes (\cite{imbalance}). So class weighting automatically adjusts the weight of each class ($w_k$) according to:
+\[w_k=\frac{N}{K\cdot n_k}\]
+where N = total number of samples, K = number of classes and $n_{k}$ = number of samples in class k.\\
+So the minority classes are given higher weights while majority classes are given less weight. Hence misclassifying a minority‑class sample causes a larger penalty, so the model is encouraged to learn decision boundaries that treat all classes fairly. This ensures consistent performance across all sentiment categories and improves the performance metrics like macro-averaged precision, recall and F1-score.
+
+\item \textbf{Naive Bayes Model (ComplementNB):} Complement Naive Bayes (ComplementNB) is a variant of Multinomial Naive Bayes
+introduced by \citet{wang2012baselines} that corrects for the class-imbalance
+bias inherent in standard Multinomial NB. Whereas standard Multinomial NB
+estimates the likelihood of each word given a class $k$ directly, ComplementNB
+instead estimates the likelihood of each word given the \emph{complement} of
+class $k$, i.e.\ all documents \emph{not} belonging to class $k$. For each
+class $k$ and term $t$, the complement weight is computed as:
+\[
+\hat{\theta}_{t,k} = \frac{\alpha + \sum_{i:\, y_i \neq k} x_{it}}
+                          {\alpha \lvert V \rvert + \sum_{j} \sum_{i:\, y_i \neq k} x_{ij}}
+\]
+where $x_{it}$ is the count of term $t$ in document $i$, $\lvert V \rvert$ is
+the vocabulary size, and $\alpha$ is the Laplace smoothing parameter. The
+classification rule then assigns each document to the class whose complement
+model assigns it the \emph{lowest} log-probability:
+\[
+\hat{y} = \arg\min_{k} \sum_{t} x_{t} \log \hat{\theta}_{t,k}
+\]
+This inversion of the decision rule means the model identifies the class for
+which the document is \emph{least} explained by all other classes, which
+empirically produces better-calibrated estimates when class frequencies are
+unequal.
+
+% The motivation for choosing ComplementNB in this study is its suitability for
+% imbalanced multi-class text classification. The IMDB62 dataset contains
+% substantially more positive reviews (36,443) than neutral (19,611) or negative
+% (5,933) reviews. Standard Multinomial NB tends to over-estimate the posterior
+% of the majority class because its likelihood estimates are dominated by the
+% larger training sample of that class, leading to systematic mis-classification
+% of minority-class instances. ComplementNB mitigates this by building each
+% class model from the complement partition, so the minority classes are not
+% drowned out by the frequency advantage of the majority class. Unlike LinearSVC,
+% which requires an explicit \texttt{class\_weight=`balanced'} parameter to
+% correct for imbalance, ComplementNB achieves this correction implicitly through
+% its complement-based estimation, making it a natural and parameter-efficient
+% choice for this setting.
+
+% Both models consume the identical Bag-of-Words document–term matrix produced
+% by \texttt{CountVectorizer} with a minimum document frequency of 5, and, for
+% Scenario 5, the same square-root-discounted matrix $x \rightarrow \sqrt{x}$.
+Since ComplementNB operates on raw or smoothed term counts rather than on a
+margin-based objective, it provides a qualitatively different inductive bias
+from LinearSVC. Evaluating the same five preprocessing scenarios across both
+classifiers therefore allows us to determine whether any observed effects of
+stopword or punctuation removal are artefacts of a particular model's
+sensitivity or are genuine properties of the preprocessing transformations
+themselves.
+% Where both models agree on the direction and statistical
+% significance of a preprocessing effect, that convergence strengthens the
+% inference that the effect is driven by the information content of the removed
+% features rather than by classifier-specific behaviour.
+\end{enumerate}  
+\subsubsection{Model Evaluation}
+For each of the 10-fold cross validation splits, 90\% data was used for training and remaining 10\% was used for testing. Metrics like Accuracy, Macro-Precision, Macro-Recall and Macro F1-Score were calculated for each testing fold. These results were averaged with the total number of folds (10) and are mentioned in Tables 1 and 2.
+
+\subsubsection{Experimental Scenarios}
+Five experimental scenarios are executed to test each of the five hypotheses defined in section 3. These scenarios are: (1) All tokens are retained; (2) Only Stopwords are removed; (3) Only Punctuation is removed; (4) Both Stopwords and Punctuation are removed and (5) Frequency discounting is applied (square root weighting). This design makes it possible to clearly evaluate how different preprocessing decisions can affect the performance of sentiment classification.
+
+\section{Result Discussion}
+ The following results are based on 10-fold stratified cross validation. Tables 1 and Table 2 report the mean performance across the 10-folds recorded using the LinearSVC and ComplementNB models, with the standard deviation in parentheses. This allows for a statistical comparison across the five different preprocessing scenarios.
+% \begin{table}[h]
+% \centering
+% \label{tab:preprocessing_results}
+% \begin{tabular}{|p{6cm}|c|c|c|c|}
+% \hline
+% \textbf{Scenario} & \textbf{Accuracy} & \textbf{Precision (Macro)} & \textbf{Recall (Macro)} & \textbf{F1-Score (Macro)} \\ 
+% \hline
+% Scenario 1: All stopwords and punctuation retained & 0.7198 & 0.6177 & 0.6023 & 0.6091 \\ 
+% \hline
+% Scenario 2: Only Stopwords removed & 0.6468 & 0.5649 & 0.5595 & 0.5620 \\ 
+% \hline
+% Scenario 3: Only Punctuation removed & 0.6583 & 0.5840 & 0.5759 & 0.5796 \\ 
+% \hline
+% Scenario 4: Both stopwords and punctuation removed & 0.6499 & 0.5697 & 0.5635 & 0.5664 \\ 
+% \hline
+% Scenario 5: Frequency Discounting (Square-root rule) & 0.7151 & 0.6171 & 0.6023 & 0.6090 \\ 
+% \hline
+% \end{tabular}
+% \caption{Performance Comparison Across Preprocessing Scenarios}
+% \end{table}
+
+\begin{table}[H]
+\centering
+\label{tab:svm_cv_results}
+\begin{tabular}{|p{5.2cm}|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
+\hline
+S1: All retained          & 0.7158 (0.0078) & 0.6113 (0.0129) & 0.5981 (0.0123) & 0.6037 (0.0114) \\
+\hline
+S2: Stopwords removed     & 0.6550 (0.0067) & 0.5774 (0.0095) & 0.5716 (0.0094) & 0.5743 (0.0092) \\
+\hline
+S3: Punctuation removed   & 0.6575 (0.0069) & 0.5833 (0.0088) & 0.5776 (0.0099) & 0.5801 (0.0090) \\
+\hline
+S4: Both removed          & 0.6535 (0.0062) & 0.5758 (0.0078) & 0.5697 (0.0083) & 0.5725 (0.0079) \\
+\hline
+S5: Freq.\ Discounting    & \textbf{0.7184 (0.0081)} & \textbf{0.6127 (0.0142)} & \textbf{0.5970 (0.0130)} & \textbf{0.6036 (0.0124)} \\
+\hline
+\end{tabular}
+\caption{LinearSVC — 10-fold CV performance (mean with std in parentheses)}
+\end{table}
+
+\begin{table}[H]
+\centering
+\label{tab:nb_cv_results}
+\begin{tabular}{|p{5.2cm}|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
+\hline
+S1: All retained          & 0.6624 (0.0054) & 0.5749 (0.0085) & 0.5843 (0.0102) & 0.5788 (0.0092) \\
+\hline
+S2: Stopwords removed     & 0.6678 (0.0049) & 0.5826 (0.0089) & 0.5858 (0.0099) & 0.5835 (0.0094) \\
+\hline
+S3: Punctuation removed   & 0.6616 (0.0056) & 0.5743 (0.0087) & 0.5840 (0.0104) & 0.5783 (0.0094) \\
+\hline
+S4: Both removed          & 0.6667 (0.0048) & 0.5818 (0.0087) & 0.5848 (0.0102) & 0.5826 (0.0094) \\
+\hline
+S5: Freq.\ Discounting    & \textbf{0.6689 (0.0051)} & \textbf{0.5852 (0.0071)} & \textbf{0.5870 (0.0087)} & \textbf{0.5847 (0.0080)} \\
+\hline
+\end{tabular}
+\caption{ComplementNB - 10-fold CV performance (mean with std in parentheses)}
+\end{table}
+
+\subsection{Statistical Test Results}
+
+\paragraph{LinearSVC:}
+The Friedman test yields $\chi^2 = 33.44$, $p < 0.001$, providing strong evidence that the five preprocessing scenarios do not perform equivalently.
+Table 3 reports all ten pairwise Wilcoxon comparisons
+with Holm correction for the LinearSVC results.
+
+\begin{table}[h]
+\centering
+\label{tab:svm_pairwise}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Comparison} & \textbf{Raw $p$} & \textbf{Holm $p$} & \textbf{Significant?} \\
+\hline
+S1 vs S2  & 0.0020 & 0.0195 & Yes \\
+S1 vs S3  & 0.0020 & 0.0195 & Yes \\
+S1 vs S4  & 0.0020 & 0.0195 & Yes \\
+S2 vs S5  & 0.0020 & 0.0195 & Yes \\
+S3 vs S5  & 0.0020 & 0.0195 & Yes \\
+S4 vs S5  & 0.0020 & 0.0195 & Yes \\
+S3 vs S4  & 0.0195 & 0.0781 & No  \\
+S2 vs S3  & 0.0273 & 0.0820 & No  \\
+S2 vs S4  & 0.2754 & 0.5508 & No  \\
+\textbf{S1 vs S5}  & \textbf{0.7695} & \textbf{0.7695} & \textbf{No} \\
+\hline
+\end{tabular}
+\caption{LinearSVC pairwise Wilcoxon signed-rank tests (Holm-corrected,
+         $\alpha = 0.05$) on F1 score.}
+\end{table}
+
+\paragraph{ComplementNB:} The Friedman test yields $\chi^2 = 15.28$, $p = 0.0042 \ (p < 0.05)$. This confirms that not all five preprocessing conditions are equivalent for ComplementNB, so we proceed to the post-hoc Wilcoxon pairwise comparisons reported in Table 4.
+
+\begin{table}[h]
+\centering
+\label{tab:nb_pairwise}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Comparison} & \textbf{Raw $p$} & \textbf{Holm $p$} & \textbf{Significant?} \\
+\hline
+S2 vs S3  & 0.0020 & 0.0195 & Yes \\
+S1 vs S5  & 0.0039 & 0.0352 & Yes \\
+S3 vs S5  & 0.0039 & 0.0352 & Yes \\
+S3 vs S4  & 0.0098 & 0.0684 & No  \\
+S1 vs S2  & 0.0137 & 0.0820 & No  \\
+S1 vs S4  & 0.0371 & 0.1855 & No  \\
+S4 vs S5  & 0.2324 & 0.9297 & No  \\
+S2 vs S4  & 0.4922 & 1.0000 & No  \\
+S2 vs S5  & 0.7695 & 1.0000 & No  \\
+S1 vs S3  & 0.9219 & 1.0000 & No  \\
+\hline
+\end{tabular}
+\caption{ComplementNB pairwise Wilcoxon signed-rank tests (Holm-corrected,
+         $\alpha = 0.05$) on F1 score.}
+\end{table}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.65\linewidth]{result.png}
+%     \caption{Comparing Accuracy and F1-score of the SVM Classifier across the five scenarios}
+%     \label{fig:placeholder}
+% \end{figure}
+\subsection{Analysis}
+\begin{enumerate}
+
+    \item \textbf{Deletion-based preprocessing significantly degrades
+    LinearSVC performance (Hypotheses 2, 3 and 4 confirmed; Hypothesis 1 partially confirmed):}
+    For the LinearSVC model, the Friedman test ($\chi^2 = 33.44$,
+    $p < 0.001$) confirms that not all preprocessing conditions are
+    equivalent. The Holm-corrected Wilcoxon tests show that Scenarios 2,
+    3 and 4 are each significantly worse than the full-text baseline
+    Scenario 1 (all $p_{\text{Holm}} = 0.0195$). This provides a
+    statistical backing for Hypothesis 2: stopword removal alone
+    (Scenario 2) produces a large drop in mean F1 from 0.6037 (in full text baseline) to
+    0.5743, confirming that high-frequency function words such as negation markers carry discriminative signals. Punctuation removal (Scenario 3) also causes a significant decline, supporting Hypothesis 3. With respect to Hypothesis 4, the combined removal of stopwords and punctuation (Scenario 4) yields the lowest F1 score numerically (0.5725), consistent with the prediction that joint removal would be the most harmful condition. However, it is important to note that the three deletion scenarios (S2, S3, S4) are not significantly different from one another after Holm correction (all $p_{\text{Holm}} > 0.05$), indicating that their performance is statistically equivalent and that stopword removal is the dominant source of degradation. This means that although Hypothesis 4’s expected effect is supported, the stronger claim that joint removal produces significantly greater harm than either individual removal lacks statistical support. Therefore Hypothesis 4 is only partially confirmed.\\
+    The claim that full text retention (S1) produces the strongest performance across all five conditions is not supported. S1 achieves a mean F1 of 0.6037, which is statistically indistinguishable from Scenario 5 (F1 = 0.6036, $p_{\text{Holm}}$ = 0.7695) but S1 is significantly better than all deletion scenarios. Hypothesis 1 is therefore partially confirmed for LinearSVC: full-text retention is among the best-performing conditions, outperforming all deletion strategies but not significantly better than S5 (Frequency Discounting). But for ComplementNB, H1 is not confirmed, as discussed in Finding 3 below. 
+    \item \textbf{Frequency discounting is not statistically different from the full-text baseline for LinearSVC and significantly
+    outperforms all deletion strategies (Hypothesis 5 confirmed):} Scenario 5 achieves a mean F1 of 0.6036 which is almost identical to
+    Scenario 1 (0.6037) and the Wilcoxon test yields $p_{\text{Holm}} = 0.7695$, showing that the two conditions cannot be distinguished statistically. At the same time, Scenario 5 is significantly better than every deletion scenario (S2, S3, S4) (all $p_{\text{Holm}} = 0.0195$). This confirms Hypothesis 5: square-root frequency discounting retains affective
+    function words as weighted features rather than removing them, thereby outperforming complete stopword removal and approaching full-text performance.
+
+    \item \textbf{ComplementNB shows greater robustness to preprocessing, but frequency discounting still provides a statistically
+    significant advantage.} The ComplementNB model shows a notably different pattern. All five
+    F1 scores lie within a narrow band (0.5783-0.5847), and most pairwise differences are not statistically significant after Holm correction.
+    This indicates that the probabilistic structure of ComplementNB partially reduces the sensitivity to removing features. Nevertheless, Scenario 5 (Frequency Discounting) is the best performing condition (F1 Score: 0.5847) and is significantly better than the full text baseline Scenario 1 ($p_{\text{Holm}} = 0.0352$) and Scenario 3 ($p_{\text{Holm}} = 0.0352$). But this advantage does not extend uniformly to all conditions. S5 is not significantly better than Scenario 2 (pHolm = 1.000) or Scenario 4 (pHolm = 0.9297). So the benefit of frequency discounting for ComplementNB is selective rather than general. Unlike LinearSVC, where discounting and full-text retention showed equivalent performance, the ComplementNB model shows a measurable benefit from square-root weighting over the full text baseline, likely because normalising the dominant counts improves the multinomial likelihood estimates that Naive Bayes relies on. Hypothesis 1 is thus not confirmed for ComplementNB as full-text retention (S1) is significantly outperformed by frequency discounting (S5).
+
+    \item \textbf{Consistent finding across both models:}
+    Despite different absolute performance levels (LinearSVC peaks at F1 = 0.6037 and ComplementNB at 0.5847), both models agree on the ranking that is, \[Frequency \ Discounting \geq All \ Retained > Any \ Deletion \ Strategy\]
+    However, the magnitude of the gap between full retention or frequency discounting and the deletion strategies differs between the two classifiers. For LinearSVC, the differences between S1/S5 and the deletion scenarios are large and consistently statistically significant. For ComplementNB, the overall spread across all five conditions is narrow and most pairwise comparisons are non-significant, indicating that this model is considerably more robust to preprocessing choices. Despite this difference in sensitivity, the consistency of the ranking across both models strengthens the inference that the observed effects arise from the preprocessing choices themselves, rather than from any classifier specific bias.
+
+\end{enumerate}
+
+\section{Conclusion}
+Based on the experimental results of the IMDB62 dataset, it can be seen that directly deleting stopwords and punctuation will have an adverse effect on sentiment classification. By mapping scores into three categories of sentiment labels and comparing them under different preprocessing conditions, this study shows that these high frequency words are not only noise, but also carry structural and tone information related to emotional expression.\\\\
+Judging from the results, deleting stopwords or punctuation will lead to a decline in model performance, among which LinearSVC is particularly sensitive to this deletion preprocessing. In contrast, the effect of frequency discounting is more stable: instead of directly removing high-frequency words it reduces its impact while retaining the overall structure of the text. The experimental results show that this method is generally superior to the deletion scheme and shows strong feasibility in different models.\\\\
+The key finding of this study is that the sentiment analysis model relies not only on obvious emotional words, but also on the overall organisation of the text such as negative words, conjunctions, degree adverbs and punctuation marks with expressive functions. Although deleting these components can narrow the feature space, it may also lead to the loss of useful information. Therefore, for the task of sentiment analysis, instead of simply deleting high-frequency words, it is better to reduce their impact moderately while retaining them. Future research can further verify this conclusion across datasets of different types, languages and model frameworks. All the source code along with the raw and preprocessed datasets for all the five scenarios is publicly available at \url{https://github.com/GhoshNet/Text-Analytics-Term-Project/tree/main/Term%20Project}
+
+
+\bibliographystyle{chicago}
+\bibliography{references}
+
+
+% Insert all pages
+\includepdf[pages=-]{Parth.pdf}
+\includepdf[pages={1}]{Mukul.pdf}
+\includepdf[pages=-]{Drishya.pdf}
+\newpage
+\includepdf[pages=-]{Tanmay.pdf}
+\newpage
+\includepdf[pages=-]{Raghav.pdf}
+\newpage
+\includepdf[pages=-]{Yilin.pdf}
+
+
+\end{document}

@@ -1,0 +1,99 @@
+2. Tanmay Ghosh (Verifier):
+
+* Algorithm Implementation: Implemented the initial LinearSVC sentiment classification pipeline
+  (project_pipeline.py) covering all five experimental scenarios: all tokens retained, stopwords
+  removed, punctuation removed, both removed, and square-root frequency discounting. This formed
+  the foundational codebase for the group.
+
+* Algorithm Implementation: Implemented Version 2 of the pipeline (project_pipeline_v2.py)
+  introducing a three-class sentiment formulation (Negative / Neutral / Positive), incorporating
+  class_weight='balanced' to address the inherent class imbalance in IMDB62, and reporting
+  macro-averaged metrics across all classes. Accompanied this with a detailed comparative analysis
+  in Report_Results_Draft_v2.md documenting the impact of the binary-to-3-class transition.
+
+* Algorithm Implementation: Implemented the production Version 3 pipeline
+  (project_pipeline_v3.py) which integrates with the shared cross-validation framework.
+
+* Shared Cross-Validation Library: Designed and implemented cv_pipeline.py — a model-agnostic,
+  reusable 10-fold stratified cross-validation library providing run_cv_for_scenario(),
+  run_all_scenarios_cv(), and run_statistical_tests() functions with Holm step-down correction.
+  This library was used by both the LinearSVC pipeline and the ComplementNB pipeline, and
+  correctly avoids data leakage by fitting the CountVectorizer exclusively on the training fold
+  in every iteration.
+
+* Results Generation: Generated all CSV result files for the LinearSVC model: per-fold
+  performance data (results_cv_v3_folds.csv), summary statistics (results_cv_v3.csv), and
+  statistical test outputs (statistical_tests_v3.csv).
+
+* Statistical Methodology: Proposed and designed the full statistical testing framework for the
+  group (documented in Suggestions.txt): 10-fold stratified cross-validation to generate
+  repeated measurements, the Friedman test as the global omnibus test, and Holm-corrected
+  Wilcoxon signed-rank pairwise comparisons following Demsar (2006). This methodology directly
+  addressed the peer review feedback requesting stronger statistical validation.
+
+* Research Methods — Paper Writing: Authored the Train-Test Split subsection (10-fold CV
+  methodology, no-leakage guarantee) and the Statistical Significance Testing subsection
+  (two-stage non-parametric testing procedure) in the final paper, as detailed in Updates 2
+  and 3 of paper_updates.txt.
+
+* Results Discussion and Conclusion — Paper Writing: Drafted the Results Discussion section
+  and Conclusion section across two iterations (Report_Results_Draft.md,
+  Results_and_Conclusion_draft.md, Report_Results_Draft_v2.md), providing the analytical
+  interpretation of all five experimental scenarios and both pipeline versions.
+
+* Post-Peer-Review Revisions: Authored paper_updates.txt — a comprehensive, section-by-section
+  revision guide detailing all 9 updates required after peer review, including the rewritten
+  Abstract, updated Keywords, the 10-fold CV methodology replacement, the new Statistical
+  Significance Testing subsection, updated results tables (mean with std), statistical test
+  result tables (Tables 3 and 4), the fully rewritten Analysis subsection, and the rewritten
+  Conclusion. Exact LaTeX text was provided for each change.
+
+* Literature Review: Read the following papers and wrote the corresponding literature review
+  contributions:
+      * DiPietro (2022): Quantitative stopword generation for sentiment analysis via recursive
+        and iterative deletion. CoRR, vol. abs/2209.01519.
+        — Contributed to the subsection "Stopword and Punctuation Removal and Sentiment
+          Classification" (second paragraph on task-dependent stopword selection as a classifier
+          optimisation problem).
+      * Saif, Fernandez, He, and Alani (2014): On stopwords, filtering and data sparsity for
+        sentiment analysis of Twitter. Proc. LREC'14, pp. 810-817.
+        — Contributed to the subsection "Stopword and Punctuation Removal and Sentiment
+          Classification" (second paragraph on discriminative value vs. raw frequency as the
+          criterion for word removal).
+      * Wang and Manning (2012): Baselines and Bigrams: Simple, Good Sentiment and Topic
+        Classification. Proc. ACL 2012 (Short Papers), pp. 90-94.
+        — Contributed to the subsection "TF-IDF and Frequency-Sensitive Feature Weighting"
+          (paragraph on NB-SVM log-count ratio features, binary presence vs. raw TF, and
+          bigrams as sentiment-bearing constructions).
+      * Rennie, Shih, Teevan, and Karger (2003): Tackling the poor assumptions of naive Bayes
+        text classifiers. Proc. ICML-2003, pp. 616-623.
+        — Provided the theoretical grounding for the ComplementNB model description in the
+          Model Description and Implementation section (Section 5, subsection b).
+      * Seroussi, Zukerman, and Bohnert (2014): Authorship attribution with topic models.
+        Computational Linguistics, 40(2), 269-310.
+        — Primary provenance reference for the IMDB62 dataset used across all five experimental
+          scenarios; contributed to the Dataset Description section.
+      * Kohavi (1995): A study of cross-validation and bootstrap for accuracy estimation and
+        model selection. Proc. IJCAI-95, Vol. 2, pp. 1137-1143.
+        — Foundational reference supporting the choice of 10-fold stratified CV in the
+          Train-Test Split subsection of Research Methods.
+
+* Verifier Role: As Verifier, verified the weekly responsibilities of the Chair (meeting
+  agendas), Recorder (meeting minutes), Monitor (article summaries), Ambassador, and Accountant
+  (time records) throughout the project. Maintained oversight of research integrity across all
+  group activities.
+
+* Peer Reviews: Conducted and submitted detailed peer reviews for the mid-term papers of
+  Groups 1, 5, and 9, providing structured feedback across all 21 review criteria.
+
+* Repository and Submission Organisation: Restructured the repository file layout. Merged
+  Mukul's Naive Bayes branch (PR #1) into main after review. Created the final submission
+  folder (TA-Submission/) with organised, clearly-labelled code files, CSV results, and a
+  comprehensive README documenting the replicability archive. Added all Additional Materials
+  to the submission archive, including accountant weekly reports and chair meeting agendas
+  for Weeks 2 through 11.
+
+* Proof-reading: Collaboratively proof-read the final paper with the whole team.
+
+
+Signature: Tanmay Ghosh

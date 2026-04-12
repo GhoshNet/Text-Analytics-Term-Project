@@ -1,0 +1,43 @@
+Tanmay – Article Summaries Extracted from TA-Monitor-Sheet-2.xlsx
+
+Wk3 – Tanmay
+Article Citation:
+D. M. DiPietro, “Quantitative stopword generation for sentiment analysis via recursive and iterative deletion,” CoRR, vol. abs/2209.01519, 2022, doi:10.48550/arXiv.2209.01519.
+
+Short Summary:
+DiPietro (2022) re-frames stopword selection as a classifier optimisation problem rather than a one-size-fits-all pre-processing step. The paper proposes a quantitative method that uses recursive and iterative deletion to find the set of words whose removal maximally harms classification accuracy. Applied to sentiment analysis corpora, the resulting custom stoplist outperforms the NLTK standard stoplist because it preserves high-frequency sentiment-bearing words such as not, never, and very that a generic list would discard. Although computationally expensive, the approach confirms that the optimal boundary between 'useful' and 'useless' words is task-dependent. This finding directly reinforces our use of frequency discounting over binary deletion: rather than committing to a fixed exclusion list, we reduce the weight of common tokens continuously so that any word with discriminative value retains measurable influence on the classifier.
+
+Wk4 – Tanmay
+Article Citation:
+H. Saif, M. Fernández, Y. He, and H. Alani, “On stopwords, filtering and data sparsity for sentiment analysis of Twitter,” in Proc. LREC’14, Reykjavik, Iceland, May 2014, pp. 810–817.
+
+Short Summary:
+Saif et al. (2014) systematically evaluate six different stopword removal strategies on six Twitter sentiment datasets, covering both domain-general and domain-specific lists. Their key finding is that pre-compiled stopword lists consistently harm performance: they suppress negation markers (not, no, never) and intensity modifiers (very, too) that carry direct sentiment signal, while increasing data sparsity by shrinking the feature vocabulary. The only removal strategy that preserved accuracy was removing singleton words (terms appearing only once), which reduced feature-space size by approximately 65% with no loss in classification quality. The paper concludes that discriminative value—not raw frequency—should govern word removal. This finding directly motivates our frequency-discounting approach: instead of deleting entire categories of words, we apply a square-root weighting scheme that reduces, but does not eliminate, the influence of high-frequency tokens.
+
+Wk5 – Tanmay
+Article Citation:
+Sida Wang and Christopher Manning. 2012. Baselines and Bigrams: Simple, Good Sentiment and Topic Classification. In Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers), pages 90–94, Jeju Island, Korea. Association for Computational Linguistics.
+
+Short Summary:
+Wang and Manning (2012) present a study of simple bag-of-words classifiers for sentiment and topic classification, demonstrating that Naive Bayes-style log-count ratio features which are derived from unigrams and bigrams achieving state-of-the-art results on standard benchmarks including IMDB movie reviews. A central finding is that binary word presence often outperforms raw term frequency, suggesting diminishing returns from repeated occurrences of the same token. This result provides empirical grounding for sublinear frequency discounting: if the marginal information from each additional occurrence decreases, a square-root transform of raw counts is a principled way to capture this. The paper also shows that bigrams such as 'not good' or 'barely watchable' contribute substantially to sentiment classification, demonstrating that stopword removal—which destroys such two-word constructions—eliminates sentiment-bearing multi-word evidence. Together, these findings motivate retaining stopwords and applying frequency discounting as a safer alternative to deletion.
+
+Wk6 – Tanmay
+Article Citation:
+Rennie, J. D., Shih, L., Teevan, J., & Karger, D. R. (2003). Tackling the poor assumptions of naive Bayes text classifiers. In Proceedings of the Twentieth International Conference on Machine Learning (ICML-2003), Washington, DC, pp. 616–623. AAAI Press.
+
+Short Summary:
+Rennie et al. (2003) identify and correct three structural weaknesses in the standard Multinomial Naive Bayes (MNB) classifier for text. First, MNB is sensitive to class-imbalance because it estimates class probabilities directly from the more frequent class, causing it to systematically over-predict majority classes. Second, raw term counts violate the model's independence assumption far more severely than binary presence features do. Third, document-length variation distorts posterior estimates. To address these issues, the authors introduce Complement Naive Bayes (CNB), which estimates each class weight from the complement—all documents not in that class—rather than from the class itself. This inversion produces better-calibrated probability estimates under imbalance. Applied to the Reuters and 20-Newsgroups benchmarks, CNB substantially outperforms MNB. Our study adopts ComplementNB as the second classifier specifically because the IMDB62 dataset is class-imbalanced (positive reviews outnumber neutral and negative ones), and CNB's complement-based formulation corrects for this bias without requiring an explicit class-weight parameter.
+
+Wk10 – Tanmay
+Article Citation:
+Seroussi, Y., Zukerman, I., & Bohnert, F. (2014). Authorship attribution with topic models. Computational Linguistics, 40(2), 269–310. https://doi.org/10.1162/COLI_a_00173
+
+Short Summary:
+Seroussi, Zukerman, and Bohnert (2014) address the authorship attribution problem, which is identifying the writer of an anonymous text, using topic models as author representations. The paper proposes the Disjoint Author-Document Topic (DADT) model, which projects authors and documents into two separate topic spaces, and evaluates it on several corpora including the IMDb62 dataset of 61,987 movie reviews written by 62 prolific users. IMDb62 was originally compiled by these authors to test authorship attribution at medium scale with plentiful training data (approximately 1,000 texts per author). The dataset's six-field structure: reviewID, userID, itemID, rating, title, and review text; and its 1–10 numerical ratings are directly inherited in our study. Although Seroussi et al. used the ratings as authorship ground truth, we repurpose the same rating field as a sentiment label (1–3 = negative, 4–6 = neutral, 7–10 = positive), making this paper the primary provenance reference for the dataset used in all five of our experimental scenarios.
+
+Wk12 – Tanmay
+Article Citation:
+Kohavi, R. (1995). A study of cross-validation and bootstrap for accuracy estimation and model selection. In Proceedings of the 14th International Joint Conference on Artificial Intelligence (IJCAI-95), Vol. 2, pp. 1137–1143. Morgan Kaufmann.
+
+Short Summary:
+Kohavi (1995) provides a systematic empirical comparison of several model-evaluation strategies : holdout, leave-one-out, k-fold cross-validation (CV), and bootstrap across multiple classification datasets. The study shows that stratified k-fold CV with k=10 reliably produces low-bias, low-variance accuracy estimates, outperforming leave-one-out (high variance) and bootstrap (biased) for the purpose of model selection. This paper is the foundational reference for 10-fold CV as a standard practice in machine learning evaluation. In our pipeline, we adopt 10-fold stratified CV across all five preprocessing scenarios: the stratification ensures that each fold preserves the original class distribution (approximately 9.6% negative, 31.6% neutral, 58.8% positive), preventing folds that contain no minority-class examples. Each fold's vectorizer is fitted exclusively on the training partition, preventing vocabulary leakage from test data. The resulting ten independent F1 measurements per scenario then serve as the paired observations for the Friedman and Wilcoxon statistical tests recommended by Demšar (2006).

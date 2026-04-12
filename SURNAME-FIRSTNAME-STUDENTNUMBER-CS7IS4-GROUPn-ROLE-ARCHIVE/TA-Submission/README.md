@@ -95,6 +95,8 @@ TA-Submission/
 ├── requirements.txt                  ← List of Python packages needed
 │
 ├── Dataset/
+│   ├── imdb62.csv                    ← Raw, unmodified IMDB62 dataset (source file)
+│   │                                    Used as input by dataset_preprocessing.ipynb
 │   ├── imdb62_A.csv                  ← S1 & S5: Full text (all tokens retained)
 │   │                                    Note: S5 reuses this file — no words are removed
 │   │                                    for frequency discounting; the weighting is applied
@@ -102,27 +104,88 @@ TA-Submission/
 │   ├── imdb62_B.csv                  ← S2: Stopwords removed
 │   ├── imdb62_C.csv                  ← S3: Punctuation removed
 │   └── imdb62_D.csv                  ← S4: Both stopwords and punctuation removed
-│                                        (4 files cover 5 scenarios — see explanation above)
+│                                        (4 derived files cover 5 scenarios — see explanation above)
 │
 ├── code/
 │   ├── dataset_preprocessing.ipynb   ← Jupyter notebook: creates the 4 datasets above
-│   │                                    from the original raw imdb62.csv file
+│   │                                    from the raw imdb62.csv file
 │   ├── crossvalidation_pipeline.py   ← Shared engine: handles cross-validation and
 │   │                                    statistical testing (used by both models below)
 │   ├── linearsvc_pipeline.py         ← Runs the LinearSVC model across all 5 scenarios
 │   └── complementnb_pipeline.py      ← Runs the ComplementNB model across all 5 scenarios
 │
-└── results/
-    ├── linearsvc_results_summary.csv      ← LinearSVC: average scores per scenario
-    ├── linearsvc_results_per_fold.csv     ← LinearSVC: scores for each of the 10 folds
-    ├── linearsvc_statistical_tests.csv    ← LinearSVC: statistical significance results
-    ├── complementnb_results_summary.csv   ← ComplementNB: average scores per scenario
-    ├── complementnb_results_per_fold.csv  ← ComplementNB: scores for each of the 10 folds
-    └── complementnb_statistical_tests.csv ← ComplementNB: statistical significance results
+├── results/
+│   ├── linearsvc_results_summary.csv      ← LinearSVC: average scores per scenario
+│   ├── linearsvc_results_per_fold.csv     ← LinearSVC: scores for each of the 10 folds
+│   ├── linearsvc_statistical_tests.csv    ← LinearSVC: statistical significance results
+│   ├── complementnb_results_summary.csv   ← ComplementNB: average scores per scenario
+│   ├── complementnb_results_per_fold.csv  ← ComplementNB: scores for each of the 10 folds
+│   └── complementnb_statistical_tests.csv ← ComplementNB: statistical significance results
+│
+└── AdditionalMaterials/
+    │
+    ├── Final Research Paper/
+    │   └── TA_Group2_Paper_Frequency.pdf       ← Final submitted research paper (PDF)
+    │
+    ├── AccountantDocs-Parth/                   ← Weekly time-tracking reports (Parth Deshmukh, Accountant)
+    │   ├── WEEK_2_REPORT_ACCOUNTANT_GROUP2.pdf
+    │   ├── WEEK_3_REPORT_ACCOUNTANT_GROUP2.pdf
+    │   ├── WEEK_4_REPORT_ACCOUNTANT_GROUP2.pdf
+    │   ├── WEEK_5_REPORT_ACCOUNTANT_GROUP2.pdf
+    │   ├── WEEK_8_REPORT_ACCOUNTANT_GROUP2.pdf
+    │   ├── WEEK_9_REPORT_ACCOUNTANT_GROUP2.pdf
+    │   ├── WEEK_10_REPORT_ACCOUNTANT_GROUP2.pdf
+    │   ├── WEEK_11_REPORT_ACCOUNTANT_GROUP2.pdf
+    │   └── WEEK_12_REPORT_ACCOUNTANT_GROUP2.pdf
+    │
+    ├── ChairMeetingAgendas-Drishya/            ← Meeting agendas for all group meetings (Drishya Dinesh, Chair)
+    │   ├── Group 2 Meeting Agenda - Week 2.docx
+    │   ├── Group 2 Meeting Agenda - Week 3.docx
+    │   ├── Group 2 Meeting Agenda - Week 4 Meeting 1.docx
+    │   ├── Group 2 Meeting Agenda - Week 4 Meeting 2.docx
+    │   ├── Group 2 Meeting Agenda - Week 5 Meeting 1.docx
+    │   ├── Group 2 Meeting Agenda - Week 6 Meeting 1.docx
+    │   ├── Group 2 Meeting Agenda - Week 8 Meeting 1.docx
+    │   ├── Group 2 Meeting Agenda - Week 9 Meeting 1.docx
+    │   └── Group 2 Meeting Agenda - Week 10 Meeting 1.docx
+    │
+    ├── MonitorSheet-Mukul/                     ← Article summary tracking sheet (Mukul Ghare, Monitor)
+    │   └── TA Monitor Sheet.xlsx
+    │
+    ├── AmbassadorReport-Yilin/                 ← Inter-group communication report (Yilin Wen, Ambassador)
+    │   └── WEN-YILIN-25346690-CS7IS4-GROUP2-AMBASSADOR.docx
+    │
+    └── VerifierReport-Tanmay/                  ← Weekly verification records (Tanmay Ghosh, Verifier)
+        └── Verifier's Report - Tanmay.pdf
 ```
 
 > **The `results/` folder already contains our pre-computed outputs.**
 > You only need to re-run the code if you want to independently reproduce the numbers.
+
+---
+
+## Additional Materials
+
+The `AdditionalMaterials/` folder contains the supplementary group process documents
+submitted as part of the replicability archive (requirement (d) per module guidelines).
+These are organised by role:
+
+| Folder | Role | Contents |
+|--------|------|----------|
+| `Final Research Paper/` | — | `TA_Group2_Paper_Frequency.pdf` — the final submitted research paper |
+| `AccountantDocs-Parth/` | Accountant (Parth Deshmukh) | 9 weekly time-tracking reports (Weeks 2–5, 8–12) recording each member's hours contributed per week |
+| `ChairMeetingAgendas-Drishya/` | Chair (Drishya Dinesh) | 9 meeting agendas covering all group meetings from Week 2 through Week 10 |
+| `MonitorSheet-Mukul/` | Monitor (Mukul Ghare) | Spreadsheet tracking which research article each group member read and summarised each week |
+| `AmbassadorReport-Yilin/` | Ambassador (Yilin Wen) | Signed report documenting ideas exchanged with other groups |
+| `VerifierReport-Tanmay/` | Verifier (Tanmay Ghosh) | Report verifying that weekly responsibilities of all role-holders were met throughout the project |
+
+### Raw Dataset
+
+`Dataset/imdb62.csv` is the raw, unmodified source file downloaded from
+[HuggingFace tasksource/imdb62](https://huggingface.co/datasets/tasksource/imdb62).
+It is included here so the preprocessing step (Step A) can be reproduced without
+needing an external download. The four derived files (`imdb62_A/B/C/D.csv`) were
+produced from this file by `code/dataset_preprocessing.ipynb`.
 
 ---
 
@@ -221,18 +284,8 @@ the datasets and results are already provided. Run only what you need.
 
 This step re-creates `imdb62_A/B/C/D.csv` from the original raw IMDB62 file.
 
-**First**, download the raw dataset file `imdb62.csv` from:
-https://huggingface.co/datasets/tasksource/imdb62
-
-Place it inside the `Dataset/` folder so the structure looks like:
-```
-Dataset/
-├── imdb62.csv         ← raw file you just downloaded
-├── imdb62_A.csv       ← will be overwritten
-...
-```
-
-**Then**, launch Jupyter from the `code/` directory:
+The raw file `imdb62.csv` is already included in the `Dataset/` folder, so no
+download is needed. Launch Jupyter directly from the `code/` directory:
 
 ```
 cd code

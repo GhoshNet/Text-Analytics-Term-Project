@@ -1,0 +1,98 @@
+Text Analytics
+Carl Vogel
+Computational Linguistics Group
+Trinity College Dublin
+vogel@tcd.ie
+February 23, 2026
+
+Abstract
+Further details on the term projects are provided. The term project is assessed via a mid-term paper, peer-reviews of the mid-term papers and final paper submissions.
+
+Contents
+1 Overview 1
+2 Groups 1
+3 Research topics 4
+4 Term papers 4
+5 Peer review 5
+References 8
+
+1 Overview
+Assessments for this module have a group element and individual elements. Within the group element, each member of group has research responsibilities and administrative responsibilities, and there are checks and balances built into these responsibilities. The overall design is to provide a microcosm of collaborative research (which requires individual strengths in order to obtain group strengths) and the processes that are part of scholarly activity – research, documentation of research, peer review of research, aspiration towards peer-reviewed publication.
+
+2 Groups
+Professional bodies such as Engineers Ireland tend to distinguish organically formed membership units (groups) from prescribed membership units (teams) where membership is determined by factors external to member volition. Thus, the groups formed within this module would be regarded by Engineers Ireland as teams; nonetheless, I will refer to these units as groups or teams, interchangeably.
+
+(1) Group allocation is indicated in a file uploaded to the Blackboard entry for CS7IS4 and is also on the sign-in sheet circulating in the room. Please note your group membership.
+
+(2) Groups may have independent observers, and if so, their contributions should be noted.
+
+(3) Groups should arrange internal meetings to accelerate the collation individual ideas about project research as soon as possible.
+
+(4) Meetings may be synchronous or asynchronous or both, as best fits the needs of each group.
+
+(5) Each group should elect:
+a. a chair, responsible for arranging meetings at times that all group members can attend, producing meeting agendas (seeking input from other group members), chairing those meetings, assuring that the monitor knows which article each in the group (including the chair) is reading and summarizing for each week, and for group/lecturer communications;
+b. a recorder, responsible for producing minutes of group meetings and for maintaining the file of these so that they may be consulted by group members or by lecturing staff;
+c. an accountant, responsible for keeping track of the time devoted (for example, as recorded by each group member in their lab notebook) and associated contributions of each member of the group to the group project;
+d. an ambassador, responsible for communicating with other groups with the aim of sharing ideas – ambassadors may participate in other groups’ meetings and should produce a record of ideas taken from other groups and ideas given to other groups (archiving this in a statement signed by all group members for each such meeting).
+e. a monitor, responsible for ensuring that each member of the team (including the monitor) has contributed a brief summary of a scholarly journal or conference article (noting the complete bibliographic details of the print edition of the article) germane to the project and not summarized by anyone else in the group, as preparation for an ultimate synthetic review within the project essay.
+f. a verifier, responsible for verifying that the weekly responsibilities of the chair, recorder, monitor, ambassador and accountant are met additional to the responsibilities of each group member in proceeding with research integrity (archiving this in a statement signed by all group members).
+
+(6) Each member of each group may hold no more than one of the roles (chair, recorder, accountant, verifier, ambassador, monitor), unless the group has fewer than six members. In this case, the responsibilities of the verifier and the accountant may be fused, or the role of chair and ambassador may be fused.
+
+(7) The first task of each group is to determine who will fill each role and then to for its chair to email the module lecturing staff (using the subject line (where n is replaced by the group number): CS7IS4 – GROUP n ROLES) indicating who fills each role.
+
+(8) To email module lecturing staff, please copy notes to both banut@tcd.ie and max4@tcd.ie.
+
+(9) The second task of each group is to have its chair email to the module lecturing staff (using the subject line (where n is replaced by the group number): CS7IS4 – GROUP n TOPIC PREFERENCES) a tab-separated file (named CS7IS4-Group-n-Topic-Preferences.csv) containing a column for the topics provided in the order originally named, and successive columns using the surname of corresponding group members as column headers, each column containing that individual’s preference rank ordering of the topics (with 1 as most preferred), and two additional columns: one, an algorithmic ranking of the topics that agregates individual ranks; second, an overall ranking agreed by the team (which may differ from the algorithmic ranking). Rank of median individual rank is one possible algorithmic method; rank of arithmetic mean individual rank is another.
+
+(10) Groups may after some time, decide to hold a fresh election, but the outcome must still be that each group member hold no more than one of the roles and only one re-election may occur. If roles are reassigned, notice must be supplied as described above (7).
+
+(11) The agenda for each meeting (at least weekly) should be circulated in advance of the meeting include provision for discussion of:
+a. attendance noting;
+b. veracity of the minutes of the preceding meeting as an accurate record (when amended to achieve agreement, these should be signed by all group members);
+c. matters arising from those minutes;
+d. matters for discussion such as suggested by all group members, related to the group project and allocated work;
+e. time sheet records, as maintained by the accountant;
+f. any other business;
+g. confirmation that all is proceeding properly, as recorded by the verifier, with divergences noted;
+h. the time, date and location of the next meeting.
+
+(12) The minutes of each meeting should record the content of discussions and contributions of each group member in association with each agenda item.
+
+(13) The time sheets detailing individual contributions should be maintained by the accountant in a manner that enables independent verification, just as with the minutes.
+
+(14) Groups must have their interpretation of the assigned topic (see §3) approved by the module lecturer before proceeding with the topic.
+
+(15) In any meeting with lecturing staff, the files which include the records of group activities as described above should be available to inform the discussion. At the end of the term, group members may wish to take individual copies of the files for their own records. At the end of term, the original files should be provided to me as an archive of the module.
+
+(16) Please be familiar with the Trinity College Dublin policy on Dignity and Respect for example, (p. 12):
+
+Bullying is repeated inappropriate behaviour, direct or indirect, whether verbal, physical or otherwise, conducted by one or more persons against another or others, at the place of work/study and/or in the course of employment, which could reasonably be regarded as undermining the individual’s right to dignity and respect. An isolated incident of the behaviour described in this definition may be an affront to your dignity but, as a once off incident, is not considered to be bullying.
+
+Bullying can take many forms, from open aggression, threats, and shouting to subtle comments or exclusion. It can be verbal, physical or psychological. It is destructive and may have serious consequences. The impact of the behaviour on the recipient will be taken into consideration when dealing with cases of bullying....
+
+Please notice that section 4 of that document details processes for resolving matters of dignity and respect.
+
+(17) Please continue to convene group meetings towards identifying a research topic in text analytics that is of mutual interest within the group and agreed by the module lecturer.
+
+3 Research topics
+Please refer to the lecture notes with the title, “Text Analytics: Term Essay Research Topics” (ta-research-topics.pdf), for details of possible topics. Topics will be allocated taking into account the rankings agreed by teams and supplied as described above (9). However, it must be noted that there is a non-negligible chance that some topics may be more widely appealing than others, and that some groups may be allocated least-preferred topics. Effort will be made to satisfy preferences stated, taking into account the order of arrival of preference statements and conformity with the submission guidelines expressed in this document. Ties will be resolved, perhaps arbitrarily, in order to achieve a situation in which two teams are not working on the same topic.
+
+4 Term papers
+(18) The paper is submitted in two stages. The first submitted draft should include a Literature Review, articulation of Research Questions, and presentation of Research Methods. Preliminary Results and Discussion may also be included. The paper should be accompanied by a statement of contributions by each team member to the work, counter-signed by all members.
+
+(19) A good literature review is discerning in approach to scholarly literature: it does not include mention of everything ever published on the topic, but thorough discussion of works inasmuch as they are relevant to the topic. A good literature review demonstrates in its synthesis of prior work that the research question at hand remains a gap unanswered by prior work.
+
+(20) Statements of research methods should be clear and should strive for replicability, so that follow-on researchers could replicate the work or otherwise determine whether and the extent to which the work may provide a solid basis for their own research.
+
+(21) The final paper should refine the initial submission, in response to the feedback that arrives from peer review and further work on the topic. It should also include succinct statement of the results that follow from applying the methods to the text data (and related variables to be analyzed within the work). The results should then be interpreted in the context of the research question. The papers should be modelled in style on the scholarly works encountered within the module and in the course of reading published papers in the topic area. Sources should be unambiguously attributed, and bibliographic details of cited works should be complete. Various publication style guides exist and elaborate on canons of scholarly prose presentation (e.g Hodges & Whitten, 1977; American Psychological Association, 2010). The papers should be constructed as candidate long paper submissions to the 2017 International Workshop on Computational Semantics. This does not require that each submission falls within the field of computational semantics; rather this event is selected as a representative event in supplying constraints on submissions for scholarly review. The format indicated distinguishes between “short papers” (no more than five pages, excluding references and appendices, using the style template provided) and “long papers” (no more than 10 pages, excluding references and appendices, using the template provided). The papers for this module are long papers in that sense.
+
+(22) Papers should be written with reproducibility in mind. It will be necessary for each member of each team to submit a zip file or gziped tar file containing:
+a. The treated data analyzed;
+b. CSV files containing the summary measurements of data;
+c. Any code written for to produce the CSV or analyze the columns of data therein;
+d. Any additional materials that are wished to be submitted.
+
+in files that are clearly labelled according to their sort.
+
